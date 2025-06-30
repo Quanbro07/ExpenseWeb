@@ -37,10 +37,10 @@ lerna-debug.log*
 *.sw?
 
 # === Angular (bỏ nếu không dùng Angular) ===
-# .angular/cache
-# .sass-cache/
-# connect.lock
-# coverage
-# libpeerconnection.log
-# testem.log
-# typings
+.angular/cache
+.sass-cache/
+connect.lock
+coverage
+libpeerconnection.log
+testem.log
+typings
