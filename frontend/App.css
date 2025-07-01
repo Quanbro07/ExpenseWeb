@@ -1,0 +1,60 @@
+.bigBanner {
+  height: 200px;
+  background: #dfedf2;
+  background: linear-gradient(90deg, rgba(223, 237, 242, 1) 8%, rgba(224, 255, 237, 1) 44%, rgba(255, 204, 217, 1) 100%);
+  color: #ffffff;
+  text-align: center;
+  padding-top: 70px;
+}
+
+.stickyDown {
+  flex: auto;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+}
+
+.stickyAll {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-items: baseline;
+  justify-content: baseline;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+}
+
+.down {
+  width: 150px;
+  height: 25px;
+}
+
+.signin {
+  width: 100px;
+  height: 30px;
+}
+
+.signup {
+  width: 100px;
+  height: 30px;
+  background: #FEFFE0;
+  background: linear-gradient(90deg, rgba(254, 255, 224, 1) 0%, rgba(254, 255, 224, 1) 32%, rgba(255, 204, 217, 1) 100%);
+  border: 0px;
+  color: #a0bce4
+}
+
+.searchBox {
+  width: 250px;
+  height: 25px;
+}
+
+body {
+  background-color: #ffffff;
+  background-image: url(bg.jpg);
+  background-size: 120%;
+  background-repeat: initial;
+  background-position: center top;
+}
