@@ -1,0 +1,70 @@
+.transdt {
+    font-size: 30px;
+    color: #4f5b57;
+    font-weight: 500;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.transtime {
+    margin-left: 30px;
+}
+
+.transbalance {
+    font-size: 25px;
+    color: rgb(46, 70, 62);
+    font-weight: 500;
+    padding-bottom: 10px;
+
+}
+
+.transmoney {
+    font-size: 30px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.transactionItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: baseline;
+    width: 65%;
+    background: #ffffff;
+    background: linear-gradient(120deg, rgba(244, 236, 245, 0.717) 0%, rgba(255, 242, 242, 0.02) 100%);
+    justify-self: center;
+    border-radius: 20px;
+    border-width: 10px;
+    border-color: white;
+    transform: translate(0, 20%)
+}
+
+.firstCol {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.secondCol {
+    padding-top: 20px;
+    padding-left: 300px;
+    display: flex;
+    flex-direction: column;
+    font-size: 25px;
+    justify-content: space-between;
+}
+
+.sr {
+    color: #4f5b57;
+    font-weight: 500;
+    font-size: 30px;
+}
+
+.idtrans {
+    padding-bottom: 20px;
+}
+
+.message {
+    font-style: italic;
+}

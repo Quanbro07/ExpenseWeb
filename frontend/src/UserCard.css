@@ -1,0 +1,65 @@
+.userCard {
+    margin-top: 30px;
+    width: 90%;
+    height: 400px;
+    transform: translate(80px);
+    backdrop-filter: blur(12px) contrast(1.2);
+    border-radius: 40px;
+}
+
+.glass {
+    z-index: 1;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.001);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(100px);
+    border-radius: 40px;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0);
+    box-shadow: 0 8px 40px 0 rgba(94, 91, 91, 0.403);
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.avatar {
+    width: 200px;
+}
+
+.information {
+    padding-left: 200px;
+    padding-right: 200px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.qrcode {
+    width: 250px;
+    padding-top: 10px;
+}
+
+.name {
+    font-size: 40px;
+    font-weight: 500;
+    padding-bottom: 20px;
+}
+
+.id {
+    font-size: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-weight: 500;
+}
+
+.balance {
+    font-size: 40px;
+    font-weight: 500;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

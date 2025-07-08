@@ -1,0 +1,53 @@
+.view-switcher {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.switch-buttons {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.switch-buttons button {
+    padding: 10px 20px;
+    font-size: 30px;
+    font-weight: bold;
+    background-color: #dfe6e9;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.switch-buttons button:hover {
+    background-color: #b2bec3;
+}
+
+.button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.buttonView {
+    height: 50px;
+    width: 250px;
+    font-size: 20px;
+    border-radius: 10px;
+    background: #ffffff;
+    background: linear-gradient(120deg, rgba(244, 236, 245, 0.717) 0%, rgba(255, 242, 242, 0.02) 100%);
+    justify-self: center;
+    border-radius: 20px;
+    border-color: rgba(255, 255, 255, 0.445);
+}
+
+.error-message {
+    text-align: center;
+}
+
+.loading-message {
+    text-align: center;
+}

@@ -1,0 +1,23 @@
+.statistic-dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 20px;
+}
+
+.chart-container {
+    width: 65%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.chartName {
+    padding-top: 10px;
+    text-align: center;
+    font-style: italic;
+    font-size: 20px;
+}
