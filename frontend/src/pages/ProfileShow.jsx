@@ -5,7 +5,7 @@ import NavBar from '../NavigationBar'
 import ViewSwitcher from '../ViewSwitcher'
 import UserCard from '../UserCard'
 export default function Information() {
-    //const user = users[0]
+    const user = users[0]
     return (
         <div>
             <NavBar />
