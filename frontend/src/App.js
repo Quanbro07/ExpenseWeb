@@ -20,7 +20,9 @@ function App() {
   // ✅ Khi nhập thông tin tài chính xong
   const handleFinanceSubmit = async () => {
     try {
-      const res = await fetch(`http://localhost:8080/api/v1/user/${userData.username}`);
+      const res = await fetch(
+        `http://localhost:8080/api/v1/user/${userData.username}`
+      );
       if (!res.ok) throw new Error("Không thể lấy lại dữ liệu người dùng");
 
       const updatedUser = await res.json();
@@ -31,11 +33,12 @@ function App() {
     }
   };
 
-
   // ✅ Khi đăng nhập thành công
   const handleLoginSuccess = async (loginData) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/v1/user/get?id=${loginData.id}`);
+      const res = await fetch(
+        `http://localhost:8080/api/v1/user/get?id=${loginData.id}`
+      );
       if (!res.ok) throw new Error("Không lấy được thông tin người dùng");
 
       const fullUser = await res.json(); // Lấy dữ liệu chi tiết từ backend
@@ -46,32 +49,33 @@ function App() {
     }
   };
 
-
+  // ✅ Giao diện chính
   return (
-    <div className="app-container">
-      {currentForm === "login" && (
-        <LoginForm
-          onSwitch={() => setCurrentForm("register")}
-          onLoginSuccess={handleLoginSuccess} // 👈 truyền vào LoginForm
-        />
-      )}
+    <>
+      {currentForm === "profile" && userData ? (
+        <ProfileShow user={userData} />
+      ) : (
+        <div className="app-container">
+          {currentForm === "login" && (
+            <LoginForm
+              onSwitch={() => setCurrentForm("register")}
+              onLoginSuccess={handleLoginSuccess}
+            />
+          )}
 
-      {currentForm === "register" && (
-        <RegisterForm
-          onRegister={handleRegister}
-          onSwitch={() => setCurrentForm("login")}
-        />
-      )}
+          {currentForm === "register" && (
+            <RegisterForm
+              onRegister={handleRegister}
+              onSwitch={() => setCurrentForm("login")}
+            />
+          )}
 
-      {currentForm === "finance" && isNewUser && userData?.id && (
-        <FinanceForm
-          userId={userData.id}
-          onSubmit={handleFinanceSubmit} // 👈 gọi khi xong finance
-        />
+          {currentForm === "finance" && isNewUser && userData?.id && (
+            <FinanceForm userId={userData.id} onSubmit={handleFinanceSubmit} />
+          )}
+        </div>
       )}
-
-      {currentForm === "profile" && userData && <ProfileShow user={userData} />}
-    </div>
+    </>
   );
 }
 
