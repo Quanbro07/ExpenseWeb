@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./App.css";
+import "./LoginForm.css";
 export default function FinanceForm({ userId, onSubmit }) {
   const [salary, setSalary] = useState("");
   const [monthlyLimit, setMonthlyLimit] = useState("");
