@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./App.css";
+import "./LoginForm.css";
 
 export default function RegisterForm({ onRegister, onSwitch }) {
   const [email, setEmail] = useState("");
