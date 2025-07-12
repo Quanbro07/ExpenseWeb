@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("api/v1/dailyExpense")
 public class DailyExpenseSettingController {
@@ -33,7 +34,10 @@ public class DailyExpenseSettingController {
         return dailyExpenseSettingService.updateDailyExpenseSetting(dailyExpenseSettingRequestDTO);
     }
 
-
-
+    // Get
+    @GetMapping("/get")
+    public ResponseEntity<DailyExpenseSettingResponseDTO> getByUserId(@RequestParam Long userId) {
+        return dailyExpenseSettingService.getDailyExpenseSettingByUserId(userId);
+    }
 
 }

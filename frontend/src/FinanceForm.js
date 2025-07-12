@@ -23,15 +23,22 @@ export default function FinanceForm({ userId, onSubmit }) {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        alert("Lỗi khi lưu thông tin tài chính");
+      if (res.status === 409) {
+        alert(
+          "Người dùng đã có thông tin tài chính. Vui lòng chỉnh sửa thay vì tạo mới."
+        );
         return;
+      }
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "Lỗi không xác định");
       }
 
       alert("Lưu thành công!");
       onSubmit();
-    } catch {
-      alert("Lỗi kết nối backend");
+    } catch (err) {
+      alert("Lỗi khi lưu thông tin tài chính:\n" + err.message);
     }
   };
 

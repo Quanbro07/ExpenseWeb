@@ -3,27 +3,28 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import FinanceForm from "./FinanceForm";
 import ProfileShow from "./pages/ProfileShow";
+import TransactionPage from "./TransactionPage";
+import NavBar from "./NavigationBar";
 import "./App.css";
 
 function App() {
   const [currentForm, setCurrentForm] = useState("login");
   const [isNewUser, setIsNewUser] = useState(false);
-  const [userData, setUserData] = useState(null); // chứa { email, username, id }
+  const [userData, setUserData] = useState(null);
 
-  // ✅ Khi đăng ký thành công
   const handleRegister = (userInfo) => {
     setIsNewUser(true);
     setUserData(userInfo);
     setCurrentForm("finance");
   };
 
-  // ✅ Khi nhập thông tin tài chính xong
   const handleFinanceSubmit = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/v1/user/${userData.username}`
+        `http://localhost:8080/api/v1/user/get?id=${userData.id}`
       );
       if (!res.ok) throw new Error("Không thể lấy lại dữ liệu người dùng");
+      console.log("userData.id:", userData.id);
 
       const updatedUser = await res.json();
       setUserData(updatedUser);
@@ -33,7 +34,6 @@ function App() {
     }
   };
 
-  // ✅ Khi đăng nhập thành công
   const handleLoginSuccess = async (loginData) => {
     try {
       const res = await fetch(
@@ -41,7 +41,7 @@ function App() {
       );
       if (!res.ok) throw new Error("Không lấy được thông tin người dùng");
 
-      const fullUser = await res.json(); // Lấy dữ liệu chi tiết từ backend
+      const fullUser = await res.json();
       setUserData(fullUser);
       setCurrentForm("profile");
     } catch (err) {
@@ -49,32 +49,43 @@ function App() {
     }
   };
 
-  // ✅ Giao diện chính
   return (
     <>
-      {currentForm === "profile" && userData ? (
-        <ProfileShow user={userData} />
-      ) : (
-        <div className="app-container">
-          {currentForm === "login" && (
-            <LoginForm
-              onSwitch={() => setCurrentForm("register")}
-              onLoginSuccess={handleLoginSuccess}
-            />
-          )}
-
-          {currentForm === "register" && (
-            <RegisterForm
-              onRegister={handleRegister}
-              onSwitch={() => setCurrentForm("login")}
-            />
-          )}
-
-          {currentForm === "finance" && isNewUser && userData?.id && (
-            <FinanceForm userId={userData.id} onSubmit={handleFinanceSubmit} />
-          )}
-        </div>
+      {currentForm !== "login" && currentForm !== "register" && (
+        <NavBar onNavigate={(page) => setCurrentForm(page)} />
       )}
+
+      <div className="app-container">
+        {currentForm === "login" && (
+          <LoginForm
+            onSwitch={() => setCurrentForm("register")}
+            onLoginSuccess={handleLoginSuccess}
+          />
+        )}
+
+        {currentForm === "register" && (
+          <RegisterForm
+            onRegister={handleRegister}
+            onSwitch={() => setCurrentForm("login")}
+          />
+        )}
+
+        {currentForm === "finance" && isNewUser && userData?.id && (
+          <FinanceForm userId={userData.id} onSubmit={handleFinanceSubmit} />
+        )}
+
+        {currentForm === "profile" && userData && (
+          <ProfileShow user={userData} />
+        )}
+
+        {currentForm === "transaction" && userData && (
+          <TransactionPage
+            userId={userData.id}
+            user={userData}
+            onBack={() => setCurrentForm("profile")}
+          />
+        )}
+      </div>
     </>
   );
 }

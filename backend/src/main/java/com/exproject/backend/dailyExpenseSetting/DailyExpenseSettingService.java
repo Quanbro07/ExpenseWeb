@@ -71,10 +71,27 @@ public class DailyExpenseSettingService {
         // Lưu
         dailyExpenseSettingRepository.save(existDailyExpenseSetting);
 
-        // Tạo Response DTO
+       // Tạo Response DTO
         DailyExpenseSettingResponseDTO dailyExpenseSettingResponseDTO = new
                 DailyExpenseSettingResponseDTO(existDailyExpenseSetting);
 
         return new ResponseEntity<>(dailyExpenseSettingResponseDTO, HttpStatus.OK);
     }
+    @Override
+        public ResponseEntity<DailyExpenseSettingResponseDTO> getDailyExpenseSettingByUserId(Long user) {
+        Optional<DailyExpenseSetting> setting = dailyExpenseSettingRepository.findByUserId(user);
+
+        if (setting.isEmpty()) {
+                return ResponseEntity.notFound().build();
+        }
+
+        DailyExpenseSetting s = setting.get();
+
+        DailyExpenseSettingResponseDTO dto = DailyExpenseSettingResponseDTO.builder()
+                .dailyAmount(s.getDailyAmount())
+                .description(s.getDescription())
+                .user(s.getUser())
+                .build();
+        return ResponseEntity.ok(dto);
+        }
 }
