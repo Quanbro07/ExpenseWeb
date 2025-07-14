@@ -24,8 +24,6 @@ export default function LoginForm({ onSwitch, onLoginSuccess }) {
         return;
       }
 
-      alert("✅ Đăng nhập thành công!");
-
       // 👇 Kiểm tra kỹ xem data có phải chứa user info không
       if (onLoginSuccess && typeof onLoginSuccess === "function") {
         onLoginSuccess(data);

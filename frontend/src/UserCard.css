@@ -1,8 +1,8 @@
 .userCard {
-  margin-top: 30px;
-  width: 120%;
+  margin-top: -30%;
+  width: 300%;
   height: 400px;
-  transform: translate(-80px);
+  transform: translate(-400px);
   backdrop-filter: blur(12px) contrast(1.2);
   border-radius: 40px;
 }

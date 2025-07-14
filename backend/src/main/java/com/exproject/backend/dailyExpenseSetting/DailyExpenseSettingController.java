@@ -34,10 +34,5 @@ public class DailyExpenseSettingController {
         return dailyExpenseSettingService.updateDailyExpenseSetting(dailyExpenseSettingRequestDTO);
     }
 
-    // Get
-    @GetMapping("/get")
-    public ResponseEntity<DailyExpenseSettingResponseDTO> getByUserId(@RequestParam Long userId) {
-        return dailyExpenseSettingService.getDailyExpenseSettingByUserId(userId);
-    }
-
+ 
 }

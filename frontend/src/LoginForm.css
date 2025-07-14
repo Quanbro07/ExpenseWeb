@@ -14,7 +14,6 @@ html {
   padding: 0;
   height: 100%;
   font-family: "Roboto", sans-serif;
-  overflow: hidden;
   background: radial-gradient(circle at 20% 30%, #9f5cf0 0%, transparent 40%),
     radial-gradient(circle at 80% 20%, #4361ee 0%, transparent 40%),
     radial-gradient(circle at 60% 80%, #fcb0f1 0%, transparent 40%),
@@ -23,13 +22,15 @@ html {
   background-color: #1b003a;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
   width: 100%;
 }
 
 .app-container {
+  margin-left: 38%;
+  margin-top: 10%;
   width: 100%;
   max-width: 400px;
   padding: 2rem;
