@@ -16,7 +16,7 @@
     font-size: 30px;
     font-weight: bold;
     background-color: #dfe6e9;
-    border: none;
+    border: #ffffff;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -41,7 +41,7 @@
     background: linear-gradient(120deg, rgba(244, 236, 245, 0.717) 0%, rgba(255, 242, 242, 0.02) 100%);
     justify-self: center;
     border-radius: 20px;
-    border-color: rgba(255, 255, 255, 0.445);
+    border-color: rgba(169, 131, 131, 0.815);
 }
 
 .error-message {

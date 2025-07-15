@@ -4,16 +4,18 @@ import "./UserList.css";
 export default function UserList() {
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [loading, setLoading] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchUsers();
     }, []);
 
     const fetchUsers = async () => {
+        setLoading(true); // 🛠️ thêm dòng này
         try {
             const res = await fetch("http://localhost:8080/api/v1/user/getAll");
             const data = await res.json();
+            console.log("List: ", data)
             setUsers(data);
         } catch (err) {
             alert("Không thể tải danh sách người dùng");
@@ -21,6 +23,7 @@ export default function UserList() {
             setLoading(false);
         }
     };
+
 
     const updateUserStatus = async (id, action) => {
         try {
@@ -57,28 +60,33 @@ export default function UserList() {
         }
     };
 
-    const filteredUsers = users.filter(
-        (u) =>
-            u.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const filteredUsers = users.filter((u) => {
+        if (!u || !u.userName) return false;
+        return (
+            u.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             String(u.id).includes(searchTerm)
-    );
+        );
+    });
+
 
     return (
         <div className="user-list-container">
             <h2>📋 Danh sách người dùng</h2>
-            <input
-                className="search-input"
-                placeholder="Tìm theo ID hoặc tên..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
+            <div className="search-container">
+                <input
+                    className="search-input"
+                    placeholder="Tìm theo ID hoặc tên..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
 
             {loading ? (
                 <p>Đang tải...</p>
             ) : (
                 <table className="user-table">
                     <thead>
-                        <tr>
+                        <tr className="table">
                             <th>ID</th>
                             <th>Tên</th>
                             <th>Email</th>
@@ -88,9 +96,9 @@ export default function UserList() {
                     </thead>
                     <tbody>
                         {filteredUsers.map((user) => (
-                            <tr key={user.id}>
+                            <tr className="table" key={user.id}>
                                 <td>{user.id}</td>
-                                <td>{user.username}</td>
+                                <td>{user.userName}</td>
                                 <td>{user.email}</td>
                                 <td>{user.active ? "✅ Hoạt động" : "❌ Đã khóa"}</td>
                                 <td className="actions">
@@ -113,6 +121,7 @@ export default function UserList() {
                     </tbody>
                 </table>
             )}
+
         </div>
     );
 }

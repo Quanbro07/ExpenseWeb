@@ -25,13 +25,11 @@
   display: flex;
   flex-direction: row;
   justify-content: baseline;
-  width: 160%;
+  width: 180%;
   background: #ffffff;
-  background: linear-gradient(
-    120deg,
-    rgba(244, 236, 245, 0.717) 0%,
-    rgba(255, 242, 242, 0.02) 100%
-  );
+  background: linear-gradient(120deg,
+      rgba(244, 236, 245, 0.717) 0%,
+      rgba(255, 242, 242, 0.02) 100%);
   justify-self: center;
   border-radius: 20px;
   border-width: 10px;
@@ -75,6 +73,7 @@
   color: #ffffff;
   margin-left: 32px;
 }
+
 .buttonView {
   margin-top: 10px;
   height: 55px;
@@ -82,11 +81,9 @@
   font-size: 20px;
   border-radius: 10px;
   background: #ffffff;
-  background: linear-gradient(
-    120deg,
-    rgba(244, 236, 245, 0.717) 0%,
-    rgba(255, 242, 242, 0.02) 100%
-  );
+  background: linear-gradient(120deg,
+      rgba(244, 236, 245, 0.717) 0%,
+      rgba(255, 242, 242, 0.02) 100%);
   justify-self: center;
   border-radius: 20px;
   border-width: 0;
