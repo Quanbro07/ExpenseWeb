@@ -3,7 +3,7 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import FinanceForm from "./FinanceForm";
 import ProfileShow from "./pages/ProfileShow";
-import TransactionPage from "./TransactionPage";
+import TransactionPage from "./components/TransactionPage";
 import Transaction from "./Transaction";
 import NavBar from "./NavigationBar";
 import "./App.css";
