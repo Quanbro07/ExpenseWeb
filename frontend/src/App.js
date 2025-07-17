@@ -7,6 +7,7 @@ import TransactionPage from "./components/TransactionPage";
 import Transaction from "./Transaction";
 import NavBar from "./NavigationBar";
 import "./App.css";
+import AdminPage from "./AdminPage";
 
 function App() {
   const [currentForm, setCurrentForm] = useState("login");
@@ -96,22 +97,29 @@ function App() {
       console.log("👤 User từ backend:", fullUser);
       setUserData(fullUser);
 
-      // Gọi ngay sau khi setUserData
+      if (fullUser.role === "ADMIN") {
+        setCurrentForm("admin");
+        return; // Dừng ở đây nếu là admin
+      }
+
       await handleFetchAllExpenses(fullUser.id);
       await handleFetchBalance(fullUser.id);
-
       setCurrentForm("profile");
     } catch (err) {
       alert("Lỗi khi lấy dữ liệu người dùng từ backend");
     }
   };
 
+
   return (
     <>
       {currentForm !== "login" && currentForm !== "register" && (
         <NavBar onNavigate={(page) => setCurrentForm(page)} />
       )}
-
+      <div style={{ textAlign: "center", marginTop: "10px" }}>
+        <button onClick={() => setCurrentForm("admin")}>🔧 Mở Admin (DEV)</button>
+        <button onClick={() => setCurrentForm("profile")}>👤 Mở Profile (DEV)</button>
+      </div>
       <div className="app-container">
         {currentForm === "login" && (
           <LoginForm
@@ -153,6 +161,7 @@ function App() {
             />
           </>
         )}
+        {currentForm === "admin" && <AdminPage />}
       </div>
     </>
   );
