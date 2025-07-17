@@ -19,8 +19,8 @@ public class DailyExpenseSetting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double dailyAmount;
-    private String description;
+    private Double dailyAmount = 0.0;
+    private String description = "Daily Expense";
 
     @OneToOne
     @JoinColumn(name = "user_id",referencedColumnName = "id")

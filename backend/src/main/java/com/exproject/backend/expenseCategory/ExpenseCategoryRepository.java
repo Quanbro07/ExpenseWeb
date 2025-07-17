@@ -27,4 +27,6 @@ public interface ExpenseCategoryRepository extends JpaRepository<ExpenseCategory
             @Param("category") ExpenseCategoryEnum category,
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate);
+
+    List<ExpenseCategory> findAllByExpenseId(Long expenseId);
 }

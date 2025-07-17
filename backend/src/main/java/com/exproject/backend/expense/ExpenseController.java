@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -35,8 +36,18 @@ public class ExpenseController {
         return expenseService.updateExpense(expenseRequestDTO);
     }
 
+    // Lấy 1 Expense của User
     @GetMapping("/get")
+    public ResponseEntity<ExpenseResponseDTO> getExpense(
+            @RequestParam Long userId,
+            @RequestParam LocalDate expenseDate) {
+        return expenseService.getExpense(userId,expenseDate);
+    }
+
+    // Lay Tất cả Expense của User
+    @GetMapping("/getAll")
     public ResponseEntity<List<ExpenseResponseDTO>> getAllExpenseByUserId(@RequestParam Long userId) {
         return expenseService.getAllExpenseByUserId(userId);
     }
+
 }

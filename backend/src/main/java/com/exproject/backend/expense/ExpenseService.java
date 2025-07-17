@@ -7,6 +7,8 @@ import com.exproject.backend.dailyExpenseSetting.dailyExpenseSettingInfo.DailyEx
 import com.exproject.backend.expense.dto.ExpenseRequestDTO;
 import com.exproject.backend.expense.dto.ExpenseResponseDTO;
 import com.exproject.backend.expense.expenseInfo.Expense;
+import com.exproject.backend.expenseCategory.ExpenseCategoryRepository;
+import com.exproject.backend.expenseCategory.expenseCategoryInfo.ExpenseCategory;
 import com.exproject.backend.user.UserRepository;
 import com.exproject.backend.user.UserService;
 import com.exproject.backend.user.userInfo.User;
@@ -26,6 +28,7 @@ import java.util.Optional;
 @Service
 public class ExpenseService {
     private final ExpenseRepository expenseRepository;
+    private final ExpenseCategoryRepository expenseCategoryRepository;
     private final DailyExpenseSettingRepository dailyExpenseSettingRepository;
     private final BalanceRepository balanceRepository;
     private final UserRepository userRepository;
@@ -34,11 +37,13 @@ public class ExpenseService {
     public ExpenseService(ExpenseRepository expenseRepository,
                           DailyExpenseSettingRepository dailyExpenseSettingRepository,
                           UserRepository userRepository,
-                          BalanceRepository balanceRepository) {
+                          BalanceRepository balanceRepository,
+                          ExpenseCategoryRepository expenseCategoryRepository) {
         this.expenseRepository = expenseRepository;
         this.dailyExpenseSettingRepository = dailyExpenseSettingRepository;
         this.balanceRepository = balanceRepository;
         this.userRepository = userRepository;
+        this.expenseCategoryRepository = expenseCategoryRepository;
     }
 
     // Tạo mới expense dựa trên DailyExpenseSetting cho tât cả User Mỗi ngày
@@ -215,5 +220,13 @@ public class ExpenseService {
         ExpenseResponseDTO expenseResponseDTO = new ExpenseResponseDTO(newExpense);
 
         return new ResponseEntity<>(expenseResponseDTO, HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<ExpenseResponseDTO> getExpense(Long userId, LocalDate expenseDate) {
+        Expense existExpense = expenseRepository.findByUserIdAndExpenseDate(userId,expenseDate)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found"));
+
+        ExpenseResponseDTO expenseResponseDTO = new ExpenseResponseDTO(existExpense);
+        return new ResponseEntity<>(expenseResponseDTO, HttpStatus.OK);
     }
 }
