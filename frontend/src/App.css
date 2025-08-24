@@ -1,12 +1,10 @@
 .bigBanner {
   height: 200px;
   background: #dfedf2;
-  background: linear-gradient(
-    90deg,
-    rgba(223, 237, 242, 1) 8%,
-    rgba(224, 255, 237, 1) 44%,
-    rgba(255, 204, 217, 1) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(223, 237, 242, 1) 8%,
+      rgba(224, 255, 237, 1) 44%,
+      rgba(255, 204, 217, 1) 100%);
   color: #ffffff;
   text-align: center;
   padding-top: 70px;
@@ -46,12 +44,10 @@
   width: 100px;
   height: 30px;
   background: #feffe0;
-  background: linear-gradient(
-    90deg,
-    rgba(254, 255, 224, 1) 0%,
-    rgba(254, 255, 224, 1) 32%,
-    rgba(255, 204, 217, 1) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(254, 255, 224, 1) 0%,
+      rgba(254, 255, 224, 1) 32%,
+      rgba(255, 204, 217, 1) 100%);
   border: 0px;
   color: #a0bce4;
 }
@@ -61,4 +57,9 @@
   height: 25px;
 }
 
-
+.SettingButton {
+  width: 250px;
+  height: 80px;
+  font-size: 20px;
+  margin: 50px 20px;
+}

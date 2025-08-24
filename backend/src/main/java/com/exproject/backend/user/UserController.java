@@ -42,6 +42,16 @@ public class UserController {
         return userService.updateUser(id,userRequestDTO);
     }
 
+    @PutMapping("/deactivate/{id}")
+    public ResponseEntity<UserResponseDTO> deactivateUser(@PathVariable Long id) {
+        return userService.deactivateUser(id);
+    }
+
+    @PutMapping("/activate/{id}")
+    public ResponseEntity<UserResponseDTO> activateUser(@PathVariable Long id) {
+        return userService.activateUser(id);
+    }
+
     // Get User
     @GetMapping("/get")
     public ResponseEntity<UserResponseDTO> getUser(@RequestParam Long id) {

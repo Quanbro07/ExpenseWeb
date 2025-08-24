@@ -26,6 +26,7 @@ public class User {
     private String email;
     private String password;
     private UserRole role;
+    private Boolean active;
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Balance balance;

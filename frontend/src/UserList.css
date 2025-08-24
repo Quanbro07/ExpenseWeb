@@ -54,3 +54,14 @@
 .search-container {
     text-align: center;
 }
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border: none;
+}
+
+.actionButton {
+    width: 100px;
+}
