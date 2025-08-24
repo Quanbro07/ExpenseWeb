@@ -126,4 +126,22 @@ public class UserService {
 
         return new ResponseEntity<>(userResponseDTOList, HttpStatus.OK);
     }
+
+    public ResponseEntity<Boolean> getUserActiveState(Long id) {
+        User existuser = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found"));
+
+        return new ResponseEntity<>(existuser.isActive(),HttpStatus.OK);
+    }
+
+    public ResponseEntity<Boolean> changeUserActiveState(Long id,boolean state) {
+        User existuser = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found"));
+
+        existuser.setActive(state);
+
+        userRepository.save(existuser);
+
+        return new ResponseEntity<>(existuser.isActive(),HttpStatus.OK);
+    }
 }

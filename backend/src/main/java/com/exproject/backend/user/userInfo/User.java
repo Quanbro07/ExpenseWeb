@@ -27,6 +27,9 @@ public class User {
     private String password;
     private UserRole role;
 
+    @Builder.Default
+    private boolean isActive = true;
+
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Balance balance;
 

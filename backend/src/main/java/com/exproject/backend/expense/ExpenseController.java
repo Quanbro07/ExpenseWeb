@@ -2,6 +2,7 @@ package com.exproject.backend.expense;
 
 import com.exproject.backend.expense.dto.ExpenseRequestDTO;
 import com.exproject.backend.expense.dto.ExpenseResponseDTO;
+import com.exproject.backend.expense.dto.ExpenseResponseIdDTO;
 import com.exproject.backend.expense.expenseInfo.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class ExpenseController {
 
     // Lấy 1 Expense của User
     @GetMapping("/get")
-    public ResponseEntity<ExpenseResponseDTO> getExpense(
+    public ResponseEntity<ExpenseResponseIdDTO> getExpense(
             @RequestParam Long userId,
             @RequestParam LocalDate expenseDate) {
         return expenseService.getExpense(userId,expenseDate);
@@ -46,7 +47,7 @@ public class ExpenseController {
 
     // Lay Tất cả Expense của User
     @GetMapping("/getAll")
-    public ResponseEntity<List<ExpenseResponseDTO>> getAllExpenseByUserId(@RequestParam Long userId) {
+    public ResponseEntity<List<ExpenseResponseIdDTO>> getAllExpenseByUserId(@RequestParam Long userId) {
         return expenseService.getAllExpenseByUserId(userId);
     }
 

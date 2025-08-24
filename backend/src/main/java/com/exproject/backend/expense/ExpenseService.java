@@ -6,6 +6,7 @@ import com.exproject.backend.dailyExpenseSetting.DailyExpenseSettingRepository;
 import com.exproject.backend.dailyExpenseSetting.dailyExpenseSettingInfo.DailyExpenseSetting;
 import com.exproject.backend.expense.dto.ExpenseRequestDTO;
 import com.exproject.backend.expense.dto.ExpenseResponseDTO;
+import com.exproject.backend.expense.dto.ExpenseResponseIdDTO;
 import com.exproject.backend.expense.expenseInfo.Expense;
 import com.exproject.backend.expenseCategory.ExpenseCategoryRepository;
 import com.exproject.backend.expenseCategory.expenseCategoryInfo.ExpenseCategory;
@@ -167,16 +168,16 @@ public class ExpenseService {
     }
 
     // Find All ExpenseByUserId
-    public ResponseEntity<List<ExpenseResponseDTO>> getAllExpenseByUserId(Long userId) {
+    public ResponseEntity<List<ExpenseResponseIdDTO>> getAllExpenseByUserId(Long userId) {
         List<Expense> expenseList = expenseRepository.findAllByUserId(userId);
-        List<ExpenseResponseDTO> expenseResponseDTOList = new ArrayList<>();
+        List<ExpenseResponseIdDTO> expenseResponseIdDTOList = new ArrayList<>();
 
         for(Expense expense : expenseList) {
-            ExpenseResponseDTO expenseResponseDTO = new ExpenseResponseDTO(expense);
-            expenseResponseDTOList.add(expenseResponseDTO);
+            ExpenseResponseIdDTO expenseResponseIdDTO = new ExpenseResponseIdDTO(expense);
+            expenseResponseIdDTOList.add(expenseResponseIdDTO);
         }
 
-        return new ResponseEntity<>(expenseResponseDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(expenseResponseIdDTOList, HttpStatus.OK);
     }
 
     // Create Expense trả về
@@ -222,11 +223,11 @@ public class ExpenseService {
         return new ResponseEntity<>(expenseResponseDTO, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<ExpenseResponseDTO> getExpense(Long userId, LocalDate expenseDate) {
+    public ResponseEntity<ExpenseResponseIdDTO> getExpense(Long userId, LocalDate expenseDate) {
         Expense existExpense = expenseRepository.findByUserIdAndExpenseDate(userId,expenseDate)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found"));
 
-        ExpenseResponseDTO expenseResponseDTO = new ExpenseResponseDTO(existExpense);
+        ExpenseResponseIdDTO expenseResponseDTO = new ExpenseResponseIdDTO(existExpense);
         return new ResponseEntity<>(expenseResponseDTO, HttpStatus.OK);
     }
 }
