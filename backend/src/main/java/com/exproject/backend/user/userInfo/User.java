@@ -26,7 +26,6 @@ public class User {
     private String email;
     private String password;
     private UserRole role;
-    private Boolean active;
 
     @Builder.Default
     private boolean isActive = true;

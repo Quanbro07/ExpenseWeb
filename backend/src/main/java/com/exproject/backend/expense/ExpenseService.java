@@ -52,6 +52,7 @@ public class ExpenseService {
     // *Real: 1 ngay
     @Transactional
     public void makeNewExpense() {
+        System.out.println("[ADD NEW EXPENSE]");
         List<DailyExpenseSetting> dailyExpenseSettingList = dailyExpenseSettingRepository.findAll();
         List<Expense> expenseList = new ArrayList<>();
         LocalDate today = LocalDate.now();
@@ -222,14 +223,11 @@ public class ExpenseService {
         return new ResponseEntity<>(expenseResponseDTO, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<ExpenseResponseIdDTO> getExpense(Long userId, LocalDate expenseDate) {
+    public ResponseEntity<ExpenseResponseDTO> getExpense(Long userId, LocalDate expenseDate) {
         Expense existExpense = expenseRepository.findByUserIdAndExpenseDate(userId,expenseDate)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found"));
 
-        ExpenseResponseIdDTO expenseResponseIdDTO = new ExpenseResponseIdDTO(existExpense);
-        System.out.println("Debugging in ExpenseService.getExpense - DTO before returning:");
-        System.out.println("  ExpenseResponseIdDTO: " + expenseResponseIdDTO);
-        System.out.println("  ExpenseResponseIdDTO.getExpenseId(): " + expenseResponseIdDTO.getExpenseId());
-        return new ResponseEntity<>(expenseResponseIdDTO, HttpStatus.CREATED);
+        ExpenseResponseDTO expenseResponseIdDTO = new ExpenseResponseDTO(existExpense);
+        return new ResponseEntity<>(expenseResponseIdDTO, HttpStatus.OK);
     }
 }

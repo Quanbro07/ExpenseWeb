@@ -20,8 +20,7 @@ export default function TransactionPage({ userId }) {
           );
           if (res.ok) {
             const data = await res.json();
-            setCurrentExpense(data);
-            console.log(data.expenseId); // data đã có expenseId từ ExpenseResponseIdDTO
+            setCurrentExpense(data); // data đã có expenseId từ ExpenseResponseIdDTO
           } else if (res.status === 404) {
             setCurrentExpense(null);
           } else {
@@ -45,14 +44,12 @@ export default function TransactionPage({ userId }) {
         );
         if (res.ok) {
           const data = await res.json();
+          console.log("✅ Data:", data);
+          console.log("✅ Expense ID:", data.expenseId);
           setCurrentExpense(data);
-          console.log(currentExpense);
-          console.log(currentExpense.expenseId);
-        } else if (res.status === 404) {
+        } else {
           console.log("No expense found for selected date");
           setCurrentExpense(null);
-        } else {
-          throw new Error(`Failed to fetch expense: ${res.statusText}`);
         }
       } catch (error) {
         console.error("Error reloading expense:", error);
@@ -74,10 +71,14 @@ export default function TransactionPage({ userId }) {
 
       {/* Hai nút điều khiển */}
       <div className="button-group">
-        <button onClick={() => setShowForm("daily")}>
+        <button
+          className="transaction-button daily-expense-button"
+          onClick={() => setShowForm("daily")}
+        >
           ➕ Thêm Tổng chi tiêu
         </button>
         <button
+          className="transaction-button category-expense-button"
           onClick={() => {
             if (!currentExpense) {
               alert("⚠️ Bạn cần thêm tổng chi tiêu trước!");

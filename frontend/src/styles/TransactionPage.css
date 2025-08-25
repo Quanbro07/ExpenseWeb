@@ -1,15 +1,19 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .transaction-container {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: none; /* Remove border */
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: #5d3f8e; /* Darker purple for the container */
 }
 
 h2 {
   text-align: center;
-  color: #333;
+  color: #ffffff; /* White color for heading */
 }
 
 .date-range,
@@ -21,6 +25,7 @@ label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  color: #ffffff; /* White color for labels */
 }
 
 input[type="date"],
@@ -28,26 +33,51 @@ input[type="number"],
 input[type="text"] {
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #bb8fce; /* Lighter purple border for inputs */
   border-radius: 4px;
+  background-color: #ffffff; /* White background for inputs */
+  color: #333; /* Dark text for inputs */
 }
 
 .button-group {
   display: flex;
-  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-button {
-  padding: 10px 15px;
+.transaction-button {
+  padding: 12px 25px;
   border: none;
-  border-radius: 4px;
-  background-color: #28a745;
-  color: white;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-button:hover {
-  background-color: #218838;
+.transaction-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.daily-expense-button {
+  background-color: #ffffff; /* White background */
+  color: #5d3f8e; /* Darker purple text */
+}
+
+.daily-expense-button:hover {
+  background-color: #f0f0f0;
+}
+
+.category-expense-button {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+.category-expense-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .expense-table {
@@ -58,18 +88,20 @@ button:hover {
 
 .expense-table th,
 .expense-table td {
-  border: 1px solid #ccc;
+  border: 1px solid #bb8fce; /* Lighter purple border for table */
   padding: 10px;
   text-align: left;
+  color: #ffffff; /* White text for table cells */
 }
 
 .expense-table th {
-  background-color: #f2f2f2;
+  background-color: #7b58a1; /* Medium purple for table header */
+  color: #ffffff;
 }
 
 .no-expenses {
   text-align: center;
-  color: #ff0000;
+  color: #ffffff; /* White color for no expenses message */
   margin-top: 20px;
 }
 
@@ -81,7 +113,7 @@ button:hover {
 .expense-list {
   margin-top: 20px;
   padding: 15px;
-  background-color: #f3f3f3;
+  background-color: #7b58a1; /* Medium purple for expense list */
   border-radius: 10px;
 }
 
@@ -97,9 +129,9 @@ button:hover {
 
 .category-name {
   font-weight: 600;
-  color: #3a3a3a;
+  color: #ffffff; /* White for category name */
 }
 
 .category-amount {
-  color: #2d8c2d;
+  color: #ffffff; /* White for category amount */
 }

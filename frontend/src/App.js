@@ -22,13 +22,14 @@ function App() {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/v1/expense/get?userId=${uid}`
+        `http://localhost:8080/api/v1/expense/getAll?userId=${uid}`
       );
       if (!res.ok) throw new Error("Không thể lấy dữ liệu chi tiêu");
 
       const data = await res.json();
       console.log("✅ Chi tiêu từ backend:", data);
       setExpenseList(data);
+      console.log("✅ Chi tiêu từ frontend:", expenseList);
     } catch (err) {
       alert("Lỗi khi tải dữ liệu chi tiêu người dùng");
       console.error(err);

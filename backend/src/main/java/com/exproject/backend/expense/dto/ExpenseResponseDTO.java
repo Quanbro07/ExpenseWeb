@@ -17,11 +17,13 @@ public class ExpenseResponseDTO {
     private LocalDate createDate;
     private Double amount;
     private String description;
+    private Long expenseId;
 
     public ExpenseResponseDTO(Expense expense) {
         this.expenseDate = expense.getExpenseDate();
         this.createDate = expense.getCreateDate();
         this.amount = expense.getAmount();
         this.description = expense.getDescription();
+        this.expenseId = expense.getId();
     }
 }
