@@ -44,7 +44,9 @@ public class UserService {
                 .email(userRequestDTO.getEmail())
                 .password(userRequestDTO.getPassword())
                 .role(userRequestDTO.getRole())
+                .active(true)
                 .build();
+                
 
         // Lưu Vào Repository
         userRepository.save(newUser);
@@ -65,7 +67,10 @@ public class UserService {
     public ResponseEntity<UserResponseDTO> login(UserRequestDTO userRequestDTO) {
         User existUser = userRepository.findByEmail(userRequestDTO.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Email Not Found"));
-
+        // Check xem có bị deactivate không
+        if (!existUser.getActive()) {
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Tài khoản của bạn đã bị khóa.");
+    }
         // Check mật khẩu
         if(!existUser.getPassword().equals(userRequestDTO.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password");
@@ -75,7 +80,29 @@ public class UserService {
 
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
+    //Admin set active cho User
+    @Transactional
+    public ResponseEntity<UserResponseDTO> deactivateUser(Long id) {
+        User userToDeactivate = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found"));
 
+        userToDeactivate.setActive(false); // Đặt trạng thái active là false
+        userRepository.save(userToDeactivate);
+
+        UserResponseDTO responseDTO = new UserResponseDTO(userToDeactivate);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+    @Transactional
+    public ResponseEntity<UserResponseDTO> activateUser(Long id) {
+        User userToActivate = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found"));
+
+        userToActivate.setActive(true); // Đặt trạng thái active là true
+        userRepository.save(userToActivate);
+
+        UserResponseDTO responseDTO = new UserResponseDTO(userToActivate);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
     // Delete User
     public ResponseEntity<UserResponseDTO> deleteUser(Long id) {
         User existUser = userRepository.findById(id)

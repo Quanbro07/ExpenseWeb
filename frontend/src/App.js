@@ -116,10 +116,16 @@ function App() {
         <NavBar onNavigate={(page) => setCurrentForm(page)} />
       )}
       <div style={{ textAlign: "center", marginTop: "10px" }}>
-        <button onClick={() => setCurrentForm("admin")}>
+        <button
+          onClick={() => setCurrentForm("admin")}
+          className="SettingButton"
+        >
           🔧 Mở Admin (DEV)
         </button>
-        <button onClick={() => setCurrentForm("profile")}>
+        <button
+          onClick={() => setCurrentForm("profile")}
+          className="SettingButton"
+        >
           👤 Mở Profile (DEV)
         </button>
       </div>

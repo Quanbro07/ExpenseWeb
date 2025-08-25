@@ -11,7 +11,7 @@ export default function UserList() {
     }, []);
 
     const fetchUsers = async () => {
-        setLoading(true); // 🛠️ thêm dòng này
+        setLoading(true);
         try {
             const res = await fetch("http://localhost:8080/api/v1/user/getAll");
             const data = await res.json();
@@ -103,16 +103,17 @@ export default function UserList() {
                                 <td>{user.active ? "✅ Hoạt động" : "❌ Đã khóa"}</td>
                                 <td className="actions">
                                     <button
+                                        className="actionButton"
                                         onClick={() =>
                                             updateUserStatus(user.id, user.active ? "deactivate" : "activate")
                                         }
                                     >
                                         {user.active ? "Deactivate" : "Reactivate"}
                                     </button>
-                                    <button onClick={() => updateUserStatus(user.id, "delete")}>
+                                    <button className="actionButton" onClick={() => updateUserStatus(user.id, "delete")}>
                                         Xóa
                                     </button>
-                                    <button onClick={() => handlePasswordChange(user.id)}>
+                                    <button className="actionButton" onClick={() => handlePasswordChange(user.id)}>
                                         Đổi mật khẩu
                                     </button>
                                 </td>
