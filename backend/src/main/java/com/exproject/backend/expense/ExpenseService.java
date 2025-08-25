@@ -223,11 +223,11 @@ public class ExpenseService {
         return new ResponseEntity<>(expenseResponseDTO, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<ExpenseResponseIdDTO> getExpense(Long userId, LocalDate expenseDate) {
+    public ResponseEntity<ExpenseResponseDTO> getExpense(Long userId, LocalDate expenseDate) {
         Expense existExpense = expenseRepository.findByUserIdAndExpenseDate(userId,expenseDate)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found"));
 
-        ExpenseResponseIdDTO expenseResponseDTO = new ExpenseResponseIdDTO(existExpense);
-        return new ResponseEntity<>(expenseResponseDTO, HttpStatus.OK);
+        ExpenseResponseDTO expenseResponseIdDTO = new ExpenseResponseDTO(existExpense);
+        return new ResponseEntity<>(expenseResponseIdDTO, HttpStatus.OK);
     }
 }

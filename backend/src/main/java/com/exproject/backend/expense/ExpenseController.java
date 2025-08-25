@@ -39,7 +39,7 @@ public class ExpenseController {
 
     // Lấy 1 Expense của User
     @GetMapping("/get")
-    public ResponseEntity<ExpenseResponseIdDTO> getExpense(
+    public ResponseEntity<ExpenseResponseDTO> getExpense(
             @RequestParam Long userId,
             @RequestParam LocalDate expenseDate) {
         return expenseService.getExpense(userId,expenseDate);
@@ -50,5 +50,4 @@ public class ExpenseController {
     public ResponseEntity<List<ExpenseResponseIdDTO>> getAllExpenseByUserId(@RequestParam Long userId) {
         return expenseService.getAllExpenseByUserId(userId);
     }
-
 }
