@@ -1,5 +1,9 @@
 package com.exproject.backend.user;
 
+import com.exproject.backend.dailyExpenseSetting.DailyExpenseSettingRepository;
+import com.exproject.backend.dailyExpenseSetting.DailyExpenseSettingService;
+import com.exproject.backend.dailyExpenseSetting.dailyExpenseSettingInfo.DailyExpenseSetting;
+import com.exproject.backend.dailyExpenseSetting.dto.DailyExpenseSettingRequestDTO;
 import com.exproject.backend.user.dto.UserRequestDTO;
 import com.exproject.backend.user.dto.UserResponseDTO;
 import com.exproject.backend.user.userInfo.User;
@@ -17,10 +21,13 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final DailyExpenseSettingService dailyExpenseSettingService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       DailyExpenseSettingService dailyExpenseSettingService) {
         this.userRepository = userRepository;
+        this.dailyExpenseSettingService = dailyExpenseSettingService;
     }
 
     // Register User
@@ -41,6 +48,12 @@ public class UserService {
 
         // Lưu Vào Repository
         userRepository.save(newUser);
+
+        // Tạo mới Daily Expense mặc định(so tiền = 0)
+        DailyExpenseSettingRequestDTO dailyExpenseSettingRequestDTO =
+                new DailyExpenseSettingRequestDTO(newUser);
+
+        dailyExpenseSettingService.createDailyExpenseSetting(dailyExpenseSettingRequestDTO);
 
         // Tao Response trả về
         UserResponseDTO userResponseDTO = new UserResponseDTO(newUser);
@@ -112,5 +125,23 @@ public class UserService {
         }
 
         return new ResponseEntity<>(userResponseDTOList, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Boolean> getUserActiveState(Long id) {
+        User existuser = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found"));
+
+        return new ResponseEntity<>(existuser.isActive(),HttpStatus.OK);
+    }
+
+    public ResponseEntity<Boolean> changeUserActiveState(Long id,boolean state) {
+        User existuser = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found"));
+
+        existuser.setActive(state);
+
+        userRepository.save(existuser);
+
+        return new ResponseEntity<>(existuser.isActive(),HttpStatus.OK);
     }
 }

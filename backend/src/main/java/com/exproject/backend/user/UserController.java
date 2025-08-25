@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("api/v1/user")
 public class UserController {
@@ -51,5 +52,19 @@ public class UserController {
     @GetMapping("/getAll")
     public ResponseEntity<List<UserResponseDTO>> getAllUser() {
         return userService.getAllUser();
+    }
+
+    // Lấy trạng thái Active
+    @GetMapping("/getActive")
+    public ResponseEntity<Boolean> getUserActiveState(@RequestParam(name = "userId") Long id) {
+        return userService.getUserActiveState(id);
+    }
+
+
+    // Thay đổi trạng thái Active
+    @PutMapping("/changeActive")
+    public ResponseEntity<Boolean> changeUserActiveState(@RequestParam(name = "userId") Long id,
+        @RequestParam(name="state") boolean state) {
+        return userService.changeUserActiveState(id,state);
     }
 }

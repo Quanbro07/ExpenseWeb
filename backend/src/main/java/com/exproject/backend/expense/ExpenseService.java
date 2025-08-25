@@ -6,7 +6,10 @@ import com.exproject.backend.dailyExpenseSetting.DailyExpenseSettingRepository;
 import com.exproject.backend.dailyExpenseSetting.dailyExpenseSettingInfo.DailyExpenseSetting;
 import com.exproject.backend.expense.dto.ExpenseRequestDTO;
 import com.exproject.backend.expense.dto.ExpenseResponseDTO;
+import com.exproject.backend.expense.dto.ExpenseResponseIdDTO;
 import com.exproject.backend.expense.expenseInfo.Expense;
+import com.exproject.backend.expenseCategory.ExpenseCategoryRepository;
+import com.exproject.backend.expenseCategory.expenseCategoryInfo.ExpenseCategory;
 import com.exproject.backend.user.UserRepository;
 import com.exproject.backend.user.UserService;
 import com.exproject.backend.user.userInfo.User;
@@ -26,6 +29,7 @@ import java.util.Optional;
 @Service
 public class ExpenseService {
     private final ExpenseRepository expenseRepository;
+    private final ExpenseCategoryRepository expenseCategoryRepository;
     private final DailyExpenseSettingRepository dailyExpenseSettingRepository;
     private final BalanceRepository balanceRepository;
     private final UserRepository userRepository;
@@ -34,11 +38,13 @@ public class ExpenseService {
     public ExpenseService(ExpenseRepository expenseRepository,
                           DailyExpenseSettingRepository dailyExpenseSettingRepository,
                           UserRepository userRepository,
-                          BalanceRepository balanceRepository) {
+                          BalanceRepository balanceRepository,
+                          ExpenseCategoryRepository expenseCategoryRepository) {
         this.expenseRepository = expenseRepository;
         this.dailyExpenseSettingRepository = dailyExpenseSettingRepository;
         this.balanceRepository = balanceRepository;
         this.userRepository = userRepository;
+        this.expenseCategoryRepository = expenseCategoryRepository;
     }
 
     // Tạo mới expense dựa trên DailyExpenseSetting cho tât cả User Mỗi ngày
@@ -46,7 +52,6 @@ public class ExpenseService {
     // *Real: 1 ngay
     @Transactional
     public void makeNewExpense() {
-        System.out.println("[ADD NEW EXPENSE]");
         List<DailyExpenseSetting> dailyExpenseSettingList = dailyExpenseSettingRepository.findAll();
         List<Expense> expenseList = new ArrayList<>();
         LocalDate today = LocalDate.now();
@@ -162,16 +167,16 @@ public class ExpenseService {
     }
 
     // Find All ExpenseByUserId
-    public ResponseEntity<List<ExpenseResponseDTO>> getAllExpenseByUserId(Long userId) {
+    public ResponseEntity<List<ExpenseResponseIdDTO>> getAllExpenseByUserId(Long userId) {
         List<Expense> expenseList = expenseRepository.findAllByUserId(userId);
-        List<ExpenseResponseDTO> expenseResponseDTOList = new ArrayList<>();
+        List<ExpenseResponseIdDTO> expenseResponseIdDTOList = new ArrayList<>();
 
         for(Expense expense : expenseList) {
-            ExpenseResponseDTO expenseResponseDTO = new ExpenseResponseDTO(expense);
-            expenseResponseDTOList.add(expenseResponseDTO);
+            ExpenseResponseIdDTO expenseResponseIdDTO = new ExpenseResponseIdDTO(expense);
+            expenseResponseIdDTOList.add(expenseResponseIdDTO);
         }
 
-        return new ResponseEntity<>(expenseResponseDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(expenseResponseIdDTOList, HttpStatus.OK);
     }
 
     // Create Expense trả về
@@ -215,5 +220,16 @@ public class ExpenseService {
         ExpenseResponseDTO expenseResponseDTO = new ExpenseResponseDTO(newExpense);
 
         return new ResponseEntity<>(expenseResponseDTO, HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<ExpenseResponseIdDTO> getExpense(Long userId, LocalDate expenseDate) {
+        Expense existExpense = expenseRepository.findByUserIdAndExpenseDate(userId,expenseDate)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found"));
+
+        ExpenseResponseIdDTO expenseResponseIdDTO = new ExpenseResponseIdDTO(existExpense);
+        System.out.println("Debugging in ExpenseService.getExpense - DTO before returning:");
+        System.out.println("  ExpenseResponseIdDTO: " + expenseResponseIdDTO);
+        System.out.println("  ExpenseResponseIdDTO.getExpenseId(): " + expenseResponseIdDTO.getExpenseId());
+        return new ResponseEntity<>(expenseResponseIdDTO, HttpStatus.CREATED);
     }
 }

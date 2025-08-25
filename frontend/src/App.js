@@ -3,7 +3,7 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import FinanceForm from "./FinanceForm";
 import ProfileShow from "./pages/ProfileShow";
-import TransactionPage from "./components/TransactionPage";
+import TransactionPage from "./components/Transaction/TransactionPage";
 import Transaction from "./Transaction";
 import NavBar from "./NavigationBar";
 import "./App.css";
@@ -110,15 +110,18 @@ function App() {
     }
   };
 
-
   return (
     <>
       {currentForm !== "login" && currentForm !== "register" && (
         <NavBar onNavigate={(page) => setCurrentForm(page)} />
       )}
       <div style={{ textAlign: "center", marginTop: "10px" }}>
-        <button onClick={() => setCurrentForm("admin")}>🔧 Mở Admin (DEV)</button>
-        <button onClick={() => setCurrentForm("profile")}>👤 Mở Profile (DEV)</button>
+        <button onClick={() => setCurrentForm("admin")}>
+          🔧 Mở Admin (DEV)
+        </button>
+        <button onClick={() => setCurrentForm("profile")}>
+          👤 Mở Profile (DEV)
+        </button>
       </div>
       <div className="app-container">
         {currentForm === "login" && (

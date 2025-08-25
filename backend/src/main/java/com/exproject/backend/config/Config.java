@@ -167,13 +167,13 @@ public class Config {
             );
 
             ExpenseCategory expenseCategory5 = new ExpenseCategory(
-                    500000.0,
+                    250000.0,
                     ExpenseCategoryEnum.FoodAndDrink,
                     expense3
             );
 
             ExpenseCategory expenseCategory6 = new ExpenseCategory(
-                    500000.0,
+                    250000.0,
                     ExpenseCategoryEnum.Shopping,
                     expense3
             );
