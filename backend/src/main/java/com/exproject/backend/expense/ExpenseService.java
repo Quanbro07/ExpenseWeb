@@ -168,16 +168,16 @@ public class ExpenseService {
     }
 
     // Find All ExpenseByUserId
-    public ResponseEntity<List<ExpenseResponseIdDTO>> getAllExpenseByUserId(Long userId) {
+    public ResponseEntity<List<ExpenseResponseDTO>> getAllExpenseByUserId(Long userId) {
         List<Expense> expenseList = expenseRepository.findAllByUserId(userId);
-        List<ExpenseResponseIdDTO> expenseResponseIdDTOList = new ArrayList<>();
+        List<ExpenseResponseDTO> expenseResponseDTOList = new ArrayList<>();
 
         for(Expense expense : expenseList) {
-            ExpenseResponseIdDTO expenseResponseIdDTO = new ExpenseResponseIdDTO(expense);
-            expenseResponseIdDTOList.add(expenseResponseIdDTO);
+            ExpenseResponseDTO expenseResponseIdDTO = new ExpenseResponseDTO(expense);
+            expenseResponseDTOList.add(expenseResponseIdDTO);
         }
 
-        return new ResponseEntity<>(expenseResponseIdDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(expenseResponseDTOList, HttpStatus.OK);
     }
 
     // Create Expense trả về
