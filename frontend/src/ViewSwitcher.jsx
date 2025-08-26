@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Transactions from "./Transaction";
 import StatisticDashboard from "./StatisticDashboard";
+import "./ViewSwitcher.css"; // Import the CSS file
 
 export default function ViewSwitcher({ user, expenseList }) {
   const [view, setView] = useState("transactions");
