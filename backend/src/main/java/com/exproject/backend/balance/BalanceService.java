@@ -2,6 +2,7 @@ package com.exproject.backend.balance;
 
 import com.exproject.backend.balance.balanceDTO.BalanceRequestDTO;
 import com.exproject.backend.balance.balanceDTO.BalanceResponseDTO;
+import com.exproject.backend.balance.balanceDTO.BalanceResponseMonthlyStatusDTO;
 import com.exproject.backend.balance.balanceDTO.BalanceResponseWithUserIdDTO;
 import com.exproject.backend.balance.balanceInfo.Balance;
 import com.exproject.backend.expense.ExpenseRepository;
@@ -170,4 +171,27 @@ public class BalanceService {
     }
 
 
+    public ResponseEntity<BalanceResponseMonthlyStatusDTO> getMonthlyStatus(Long userId) {
+        Balance existBalance = balanceRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Balance Not Found"));
+
+        Double monthlyExpense = existBalance.getMonthlyExpense();
+        Double monthlyLimitedExpense = existBalance.getMonthlyLimitedExpense();
+
+        Boolean isExceeded = monthlyExpense > monthlyLimitedExpense;
+        Double exceedAmount = (isExceeded) ? monthlyExpense - monthlyLimitedExpense : 0.0;
+        Double percentageUsed = (double)Math.round(monthlyExpense / monthlyLimitedExpense);
+
+        BalanceResponseMonthlyStatusDTO balanceResponseMonthlyStatusDTO
+                = BalanceResponseMonthlyStatusDTO.builder()
+                .isExceeded(isExceeded)
+                .monthlyLimitedExpense(monthlyLimitedExpense)
+                .monthlyExpense(monthlyExpense)
+                .exceedAmount(exceedAmount)
+                .percentageUsed(percentageUsed)
+                .build();
+
+        return new ResponseEntity<>(balanceResponseMonthlyStatusDTO, HttpStatus.OK);
+
+    }
 }

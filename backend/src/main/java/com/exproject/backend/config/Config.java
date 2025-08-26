@@ -19,7 +19,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Configuration
 @Order(2)
@@ -33,7 +36,7 @@ public class Config {
                                         DailyExpenseSettingRepository dailyExpenseSettingRepository,
                                         ExpenseCategoryRepository expenseCategoryRepository) {
         return args -> {
-            // User
+            // User Config
             User user1 = User.builder()
                     .userName("Quân")
                     .email("quanbro7612006@gmail.com")
@@ -49,37 +52,22 @@ public class Config {
                     .build();
 
             User user3 = User.builder()
+                    .userName("Nguyen")
+                    .email("nguyenga12352035@gmail.com")
+                    .password("nguyenbro7")
+                    .role(UserRole.User)
+                    .build();
+
+            User user4 = User.builder()
                     .userName("Trong")
                     .email("trongga112320@gmail.com")
                     .password("trongbro7")
                     .role(UserRole.Admin)
                     .build();
 
-            userRepository.saveAll(List.of(user1,user2,user3));
-
-            // Balance
-            Balance balance1 = new Balance(1000000.0,
-                    10000000.0,
-                    3000000.0,
-                    1000000.0,
-                    LocalDate.of(2025,7,1),
-                    user1);
-
-            Balance balance2 = new Balance(8000000.0,
-                    15000000.0,
-                    5000000.0,
-                    2000000.0,
-                    LocalDate.of(2025,7,1),
-                    user2);
-
-            Balance balance3 = new Balance(50000000.0,
-                    50000000.0,
-                    10000000.0,
-                    5000000.0,
-                    LocalDate.of(2025,7,1),
-                    user3);
-
-            balanceRepository.saveAll(List.of(balance1, balance2, balance3));
+            if(userRepository.count() == 0) {
+                userRepository.saveAll(List.of(user1,user2,user3,user4));
+            }
 
             // Daily Expense
             DailyExpenseSetting dailyExpense1 = new DailyExpenseSetting(
@@ -89,7 +77,7 @@ public class Config {
             );
 
             DailyExpenseSetting dailyExpense2 = new DailyExpenseSetting(
-                    100000.0,
+                    200000.0,
                     "Daily expense user_2"
                     ,user2
             );
@@ -100,88 +88,92 @@ public class Config {
                     ,user3
             );
 
-            dailyExpenseSettingRepository.saveAll(List.of(dailyExpense1,dailyExpense2,dailyExpense3));
+            if(dailyExpenseSettingRepository.count() == 0) {
+                dailyExpenseSettingRepository.saveAll(List.of(dailyExpense1,dailyExpense2,dailyExpense3));
+            }
 
-            // Expense
-            Expense expense1 = new Expense(
-                    150000.0,
-                    LocalDate.of(2025,7,1),
-                    LocalDate.now().minusDays(1),
-                    "Tiêu xài ổn áp user_1",
-                    Boolean.FALSE,
-                    user1
-            );
+            // Expense & Expense Category Config
 
-            Expense expense2 = new Expense(
-                    200000.0,
-                    LocalDate.of(2025,7,1),
-                    LocalDate.now().minusDays(1),
-                    "Tiêu xài ổn áp user_2",
-                    Boolean.FALSE,
-                    user2
-            );
+            List<User> users = List.of(user1, user2, user3);
+            // lưu tổng chi tiêu của từng user
+            Map<User, Double> monthlyTotals = new HashMap<>();
+            for (User user : users) {
+                // ví dụ mỗi user chi khác nhau một chút
+                double baseAmount = switch (user.getUserName()) {
+                    case "Quân" -> 150000.0;
+                    case "Khoa" -> 200000.0;
+                    case "Nguyen" -> 300000.0;
+                    default -> 100000.0;
+                };
 
-            Expense expense3 = new Expense(
-                    500000.0,
-                    LocalDate.of(2025,7,1),
-                    LocalDate.now().minusDays(1),
-                    "Tiêu xài hoang phí user_3",
-                    Boolean.FALSE,
-                    user3
-            );
+                double monthlySum = 0.0;
 
-            Expense expense4 = new Expense(
-                    500000.0,
-                    LocalDate.of(2025,6,30),
-                    LocalDate.of(2025,7,1),
-                    "Tiêu xài hoang phí user_3",
-                    Boolean.TRUE,
-                    user3
-            );
+                for (int i = 0; i < 30; i++) {
+                    LocalDate expenseDate = LocalDate.now().minusDays(i);
 
-            expenseRepository.saveAll(List.of(expense1,expense2,expense3,expense4));
+                    // random dao động từ -50k đến +50k
+                    int fluctuation = ThreadLocalRandom.current().nextInt(-50, 51) * 1000;
+                    double expenseAmount = baseAmount + fluctuation;
 
-            // Expense Category
-            ExpenseCategory expenseCategory1 = new ExpenseCategory(
-                    100000.0,
-                    ExpenseCategoryEnum.FoodAndDrink,
-                    expense1
-            );
+                    if (expenseAmount < 0) expenseAmount = 0;
 
-            ExpenseCategory expenseCategory2 = new ExpenseCategory(
-                    50000.0,
-                    ExpenseCategoryEnum.Shopping,
-                    expense1
-            );
+                    Expense expense = new Expense(
+                            expenseAmount,
+                            expenseDate.withDayOfMonth(1), // tháng
+                            expenseDate,                   // ngày
+                            "Chi tiêu ngày " + expenseDate + " của " + user.getUserName(),
+                            Boolean.TRUE,
+                            user
+                    );
 
-            ExpenseCategory expenseCategory3 = new ExpenseCategory(
-                    100000.0,
-                    ExpenseCategoryEnum.Shopping,
-                    expense2
-            );
+                    expenseRepository.save(expense);
+                    monthlySum += expenseAmount;
 
-            ExpenseCategory expenseCategory4 = new ExpenseCategory(
-                    100000.0,
-                    ExpenseCategoryEnum.Education,
-                    expense2
-            );
+                    double food = expenseAmount * 0.5;
+                    double shopping = expenseAmount * 0.3;
+                    double education = expenseAmount * 0.2;
 
-            ExpenseCategory expenseCategory5 = new ExpenseCategory(
-                    250000.0,
-                    ExpenseCategoryEnum.FoodAndDrink,
-                    expense3
-            );
+                    ExpenseCategory catFood = new ExpenseCategory(food, ExpenseCategoryEnum.FoodAndDrink, expense);
+                    ExpenseCategory catShopping = new ExpenseCategory(shopping, ExpenseCategoryEnum.Shopping, expense);
+                    ExpenseCategory catEducation = new ExpenseCategory(education, ExpenseCategoryEnum.Education, expense);
 
-            ExpenseCategory expenseCategory6 = new ExpenseCategory(
-                    250000.0,
-                    ExpenseCategoryEnum.Shopping,
-                    expense3
-            );
+                    expenseCategoryRepository.saveAll(List.of(catFood, catShopping, catEducation));
+                }
 
-            expenseCategoryRepository.saveAll(List.of(
-                    expenseCategory1,expenseCategory2,expenseCategory3,expenseCategory4,
-                    expenseCategory5,expenseCategory6));
+            monthlyTotals.put(user, monthlySum);
+            }
 
+            // Balance config khớp monthlyExpense
+            if (balanceRepository.count() == 0) {
+                Balance balance1 = new Balance(
+                        1000000.0,
+                        10000000.0,
+                        5000000.0,
+                        monthlyTotals.get(user1), // khớp với Expense user1
+                        LocalDate.of(2025, 7, 1),
+                        user1
+                );
+
+                Balance balance2 = new Balance(
+                        8000000.0,
+                        15000000.0,
+                        7000000.0,
+                        monthlyTotals.get(user2), // khớp với Expense user2
+                        LocalDate.of(2025, 7, 1),
+                        user2
+                );
+
+                Balance balance3 = new Balance(
+                        50000000.0,
+                        25000000.0,
+                        80000000.0,
+                        monthlyTotals.get(user3), // khớp với Expense user3
+                        LocalDate.of(2025, 7, 1),
+                        user3
+                );
+
+                balanceRepository.saveAll(List.of(balance1, balance2, balance3));
+            }
         };
     }
 }

@@ -2,6 +2,7 @@ package com.exproject.backend.balance;
 
 import com.exproject.backend.balance.balanceDTO.BalanceRequestDTO;
 import com.exproject.backend.balance.balanceDTO.BalanceResponseDTO;
+import com.exproject.backend.balance.balanceDTO.BalanceResponseMonthlyStatusDTO;
 import com.exproject.backend.balance.balanceDTO.BalanceResponseWithUserIdDTO;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,4 +44,11 @@ public class BalanceController {
     public ResponseEntity<List<BalanceResponseWithUserIdDTO>> getAll() {
         return balanceService.getAllBalance();
     }
+
+    // Lấy Status chi tiêu định mức hiện tại
+    @GetMapping("/get-monthly-status")
+    public ResponseEntity<BalanceResponseMonthlyStatusDTO> getMonthlyStatus(@RequestParam Long userId) {
+        return balanceService.getMonthlyStatus(userId);
+    }
+
 }

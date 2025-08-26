@@ -47,7 +47,7 @@ public class ExpenseController {
 
     // Lay Tất cả Expense của User
     @GetMapping("/getAll")
-    public ResponseEntity<List<ExpenseResponseIdDTO>> getAllExpenseByUserId(@RequestParam Long userId) {
+    public ResponseEntity<List<ExpenseResponseDTO>> getAllExpenseByUserId(@RequestParam Long userId) {
         return expenseService.getAllExpenseByUserId(userId);
     }
 }

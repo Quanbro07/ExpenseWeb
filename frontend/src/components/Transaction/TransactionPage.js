@@ -5,7 +5,7 @@ import DailyTransactionList from "./DailyTransactionList"; // Import DailyTransa
 import DateSelector from "./DateSelector";
 import "../../styles/TransactionPage.css";
 
-export default function TransactionPage({ userId }) {
+export default function TransactionPage({ user, onBack, onSuccess }) {
   const formatToYYYYMMDD = (dateString) => {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) {
@@ -22,20 +22,53 @@ export default function TransactionPage({ userId }) {
   );
   const [showForm, setShowForm] = useState(null); // "daily" | "category" | null
   const [currentExpense, setCurrentExpense] = useState(null);
+  const [monthlyLimitedExpense, setMonthlyLimitedExpense] = useState(0); // New state
+  const [currentMonthTotalExpense, setCurrentMonthTotalExpense] = useState(0); // New state
 
-  // Fetch expense khi thay đổi ngày
+  // Fetch monthly limited expense
+  useEffect(() => {
+    const fetchMonthlyLimitedExpense = async () => {
+      if (!user || !user.id) return;
+      try {
+        const res = await fetch(
+          `http://localhost:8080/api/v1/balance/get-monthly-status?userId=${user.id}` // Corrected API endpoint to getMonthlyStatus
+        );
+        if (res.ok) {
+          const data = await res.json();
+          // Assuming getMonthlyStatus returns an object with monthlyLimitedExpense
+          setMonthlyLimitedExpense(data.monthlyLimitedExpense || 0);
+          // If getMonthlyStatus also returns current month's expense, we can use it here
+          // For now, we will keep calculating it in handleReload
+        } else {
+          console.error(
+            "Failed to fetch monthly limited expense from getMonthlyStatus"
+          );
+          setMonthlyLimitedExpense(0);
+        }
+      } catch (error) {
+        console.error(
+          "Error fetching monthly limited expense from getMonthlyStatus:",
+          error
+        );
+        setMonthlyLimitedExpense(0);
+      }
+    };
+    fetchMonthlyLimitedExpense();
+  }, [user]);
+
+  // Fetch expense khi thay đổi ngày (và cũng được gọi bởi handleReload)
   useEffect(() => {
     const fetchExpenseForDate = async () => {
-      if (userId && selectedDate) {
+      if (user && user.id && selectedDate) {
         console.log(
           "Fetching expense for userId:",
-          userId,
+          user.id,
           "and selectedDate:",
           selectedDate
-        ); // Added console.log
+        );
         try {
           const res = await fetch(
-            `http://localhost:8080/api/v1/expense/get?userId=${userId}&expenseDate=${selectedDate}`
+            `http://localhost:8080/api/v1/expense/get?userId=${user.id}&expenseDate=${selectedDate}`
           );
           if (res.ok) {
             const data = await res.json();
@@ -53,22 +86,58 @@ export default function TransactionPage({ userId }) {
     };
 
     fetchExpenseForDate();
-  }, [userId, selectedDate]);
+  }, [user, selectedDate]);
 
   const handleReload = async () => {
-    if (userId && selectedDate) {
+    if (user && user.id) {
       console.log(
-        "Reloading expense for userId:",
-        userId,
-        "and selectedDate:",
-        selectedDate
-      ); // Added console.log
+        "Reloading expense and checking monthly limit for userId:",
+        user.id
+      );
       try {
-        const res = await fetch(
-          `http://localhost:8080/api/v1/expense/get?userId=${userId}&expenseDate=${selectedDate}`
+        // Fetch all expenses for the current month
+        const resAllExpenses = await fetch(
+          `http://localhost:8080/api/v1/expense/getAll?userId=${user.id}`
         );
-        if (res.ok) {
-          const data = await res.json();
+        if (!resAllExpenses.ok) {
+          throw new Error(
+            "Không thể lấy tất cả giao dịch để kiểm tra giới hạn."
+          );
+        }
+        const allExpenses = await resAllExpenses.json();
+
+        const currentMonth = new Date(selectedDate).getMonth();
+        const currentYear = new Date(selectedDate).getFullYear();
+
+        const totalExpenseThisMonth = allExpenses.reduce((sum, transaction) => {
+          const transactionDate = new Date(transaction.expenseDate);
+          if (
+            transactionDate.getMonth() === currentMonth &&
+            transactionDate.getFullYear() === currentYear
+          ) {
+            return sum + transaction.amount;
+          }
+          return sum;
+        }, 0);
+        setCurrentMonthTotalExpense(totalExpenseThisMonth);
+
+        console.log("Monthly Limited Expense:", monthlyLimitedExpense); // Added console.log
+        console.log("Current Month Total Expense:", totalExpenseThisMonth); // Added console.log
+
+        // Check if monthly expense exceeds limit and show alert
+        if (
+          monthlyLimitedExpense > 0 &&
+          totalExpenseThisMonth > monthlyLimitedExpense
+        ) {
+          alert("Vượt giới hạn chi tiêu hàng tháng! Vui lòng cân chỉnh lại.");
+        }
+
+        // Also re-fetch current day's expense
+        const resCurrentDayExpense = await fetch(
+          `http://localhost:8080/api/v1/expense/get?userId=${user.id}&expenseDate=${selectedDate}`
+        );
+        if (resCurrentDayExpense.ok) {
+          const data = await resCurrentDayExpense.json();
           console.log("✅ Data:", data);
           console.log("✅ Expense ID:", data.expenseId);
           setCurrentExpense(data);
@@ -76,8 +145,10 @@ export default function TransactionPage({ userId }) {
           console.log("No expense found for selected date");
           setCurrentExpense(null);
         }
+
+        onSuccess?.(); // Trigger success callback from App.js if needed
       } catch (error) {
-        console.error("Error reloading expense:", error);
+        console.error("Error reloading expense or checking limit:", error);
         setCurrentExpense(null);
       }
     }
@@ -100,31 +171,31 @@ export default function TransactionPage({ userId }) {
         onFetch={handleReload}
       />
 
-      {/* Hai nút điều khiển */}
+      {/* Nút Thêm Chi tiêu từng loại */}
       <div className="button-group">
         <button
           className="transaction-button category-expense-button"
           onClick={() => {
-            setShowForm("category"); // No longer dependent on currentExpense
+            setShowForm("category");
           }}
         >
           ➕ Thêm Chi tiêu từng loại
         </button>
       </div>
 
-      {/* Form hiển thị theo nút bấm */}
+      {/* Form thêm chi tiêu theo loại */}
       {showForm === "category" && (
         <AddCategoryExpense
           onAddCategory={handleReload}
-          userId={userId} // Pass userId
-          selectedDate={selectedDate} // Pass selectedDate
-          expenseId={currentExpense?.expenseId} // Optional: still pass if exists for existing update logic
+          userId={user.id} // Pass userId from user prop
+          selectedDate={selectedDate}
+          expenseId={currentExpense?.expenseId}
         />
       )}
 
       {/* Danh sách giao dịch trong ngày */}
       <DailyTransactionList
-        userId={userId} // Pass userId back
+        userId={user.id} // Pass userId from user prop
         selectedDate={selectedDate}
       />
     </div>

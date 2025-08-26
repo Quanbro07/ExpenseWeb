@@ -22,33 +22,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_name")
     private String userName;
-
-    @Column(name = "user_email")
     private String email;
-
-    @Column(name = "user_password")
     private String password;
-
-    @Column(name = "user_role")
     private UserRole role;
 
-    @Column(name = "user_gender") // Added gender column
-    private int gender;
-
-    @Column(name = "is_active_status", columnDefinition = "boolean default true") // Explicit mapping
     @Builder.Default
     private boolean isActive = true;
-
-    // Explicit getter and setter for isActive to ensure JPA recognizes it
-    public boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Balance balance;
