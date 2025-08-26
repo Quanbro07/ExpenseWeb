@@ -71,6 +71,11 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password");
         }
 
+        // Check if user is active
+        if (!existUser.isActive()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.");
+        }
+
         UserResponseDTO userResponseDTO = new UserResponseDTO(existUser);
 
         return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
