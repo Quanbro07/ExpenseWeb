@@ -33,7 +33,7 @@ html {
   margin-top: 10%;
   width: 100%;
   max-width: 400px;
-  padding: 2rem;
+  padding: 0px;
 }
 
 .form-box {
@@ -112,4 +112,8 @@ html {
 
 .form-box .link:hover {
   text-decoration: underline;
+}
+
+.bigBox {
+  transform: translateY(50px);
 }

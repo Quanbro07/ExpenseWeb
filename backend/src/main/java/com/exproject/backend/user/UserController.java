@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"}, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 @RestController
 @RequestMapping("api/v1/user")
 public class UserController {
@@ -68,4 +68,11 @@ public class UserController {
         return userService.changeUserActiveState(id,state);
     }
 
+    // Đổi mật khẩu
+    @PutMapping("/resetPassword")
+    public ResponseEntity<UserResponseDTO> resetPassword(
+            @RequestParam Long id,
+            @RequestBody UserRequestDTO userRequestDTO) {
+        return userService.resetPassword(id, userRequestDTO.getPassword());
+    }
 }

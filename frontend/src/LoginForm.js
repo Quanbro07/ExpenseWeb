@@ -1,22 +1,16 @@
 import { useState } from "react";
 import "./LoginForm.css";
-import CustomAlert from './components/CustomAlert'; // Import CustomAlert
 
-export default function LoginForm({ onSwitch, onLoginSuccess }) {
+export default function LoginForm({ onSwitch, onLoginSuccess, setAlertMessage, setAlertType }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(null); // State for custom alert
-  const [alertType, setAlertType] = useState("error"); // State for custom alert type
-
-  const handleCloseAlert = () => {
-    setAlertMessage(null);
-  };
+  // Removed internal alert state and functions
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setAlertMessage(null); // Clear previous alerts
+    setAlertMessage(null); // Clear previous alerts from App.js
 
     try {
       const res = await fetch("http://localhost:8080/api/v1/user/login", {
@@ -31,6 +25,7 @@ export default function LoginForm({ onSwitch, onLoginSuccess }) {
       console.log("Login Response Data:", data);     // Log data
 
       if (!res.ok) {
+        // Use the setAlertMessage and setAlertType from props
         if (res.status === 403) {
           setAlertMessage(data.message || "Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.");
           setAlertType("error");
@@ -59,9 +54,7 @@ export default function LoginForm({ onSwitch, onLoginSuccess }) {
     <form className="form-box" onSubmit={handleLogin}>
       <h2>Đăng Nhập</h2>
 
-      {alertMessage && (
-        <CustomAlert message={alertMessage} type={alertType} onClose={handleCloseAlert} />
-      )}
+      {/* Removed internal CustomAlert rendering */}
 
       <input
         type="email"

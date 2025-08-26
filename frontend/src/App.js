@@ -156,6 +156,8 @@ function App() {
           <LoginForm
             onSwitch={() => setCurrentForm("register")}
             onLoginSuccess={handleLoginSuccess}
+            setAlertMessage={setAlertMessage} // Pass setAlertMessage to LoginForm
+            setAlertType={setAlertType} // Pass setAlertType to LoginForm
           />
         )}
 

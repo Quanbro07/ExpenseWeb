@@ -6,18 +6,25 @@ body {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  border: none; /* Remove border */
+  border: none;
+  /* Remove border */
   border-radius: 8px;
-  background-color: #5d3f8e; /* Darker purple for the container */
+  background-color: #5d3f8e;
+  /* Darker purple for the container */
 }
 
 h2 {
   text-align: center;
-  color: #ffffff; /* White color for heading */
-  font-size: 32px; /* Increased font size */
-  font-weight: 700; /* Bolder font weight */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Add text shadow */
-  margin-bottom: 25px; /* Add some space below the title */
+  color: #ffffff;
+  /* White color for heading */
+  font-size: 32px;
+  /* Increased font size */
+  font-weight: 700;
+  /* Bolder font weight */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  /* Add text shadow */
+  margin-bottom: 25px;
+  /* Add some space below the title */
 }
 
 .date-range,
@@ -29,7 +36,8 @@ label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #ffffff; /* White color for labels */
+  color: #ffffff;
+  /* White color for labels */
 }
 
 input[type="date"],
@@ -37,10 +45,13 @@ input[type="number"],
 input[type="text"] {
   width: 100%;
   padding: 8px;
-  border: 1px solid #bb8fce; /* Lighter purple border for inputs */
+  border: 1px solid #bb8fce;
+  /* Lighter purple border for inputs */
   border-radius: 4px;
-  background-color: #ffffff; /* White background for inputs */
-  color: #333; /* Dark text for inputs */
+  background-color: #ffffff;
+  /* White background for inputs */
+  color: #333;
+  /* Dark text for inputs */
 }
 
 .button-group {
@@ -66,8 +77,10 @@ input[type="text"] {
 }
 
 .daily-expense-button {
-  background-color: #ffffff; /* White background */
-  color: #5d3f8e; /* Darker purple text */
+  background-color: #ffffff;
+  /* White background */
+  color: #5d3f8e;
+  /* Darker purple text */
 }
 
 .daily-expense-button:hover {
@@ -92,20 +105,24 @@ input[type="text"] {
 
 .expense-table th,
 .expense-table td {
-  border: 1px solid #bb8fce; /* Lighter purple border for table */
+  border: 1px solid #bb8fce;
+  /* Lighter purple border for table */
   padding: 10px;
   text-align: left;
-  color: #ffffff; /* White text for table cells */
+  color: #ffffff;
+  /* White text for table cells */
 }
 
 .expense-table th {
-  background-color: #7b58a1; /* Medium purple for table header */
+  background-color: #7b58a1;
+  /* Medium purple for table header */
   color: #ffffff;
 }
 
 .no-expenses {
   text-align: center;
-  color: #ffffff; /* White color for no expenses message */
+  color: #ffffff;
+  /* White color for no expenses message */
   margin-top: 20px;
 }
 
@@ -114,10 +131,12 @@ input[type="text"] {
   font-weight: bold;
   text-align: right;
 }
+
 .expense-list {
   margin-top: 20px;
   padding: 15px;
-  background-color: #7b58a1; /* Medium purple for expense list */
+  background-color: #7b58a1;
+  /* Medium purple for expense list */
   border-radius: 10px;
 }
 
@@ -133,11 +152,13 @@ input[type="text"] {
 
 .category-name {
   font-weight: 600;
-  color: #ffffff; /* White for category name */
+  color: #ffffff;
+  /* White for category name */
 }
 
 .category-amount {
-  color: #ffffff; /* White for category amount */
+  color: #ffffff;
+  /* White for category amount */
 }
 
 /* Styles for DailyTransactionList - General */
@@ -147,8 +168,8 @@ input[type="text"] {
   margin: 20px auto;
   padding: 20px;
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
+  backdrop-filter: blur(10px) saturate(180%);
   border-radius: 15px;
   border: 1px solid rgba(255, 255, 255, 0.125);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
@@ -195,7 +216,8 @@ input[type="text"] {
 .category-summary-item .category-amount {
   font-size: 20px;
   font-weight: bold;
-  color: #ff6b6b; /* Red for expense amount */
+  color: #ff6b6b;
+  /* Red for expense amount */
 }
 
 /* Detailed Transaction Items */
@@ -224,7 +246,8 @@ input[type="text"] {
 .transaction-detail-item .transmoney {
   font-size: 18px;
   font-weight: bold;
-  color: #ff6b6b; /* Red for expense amount */
+  color: #ff6b6b;
+  /* Red for expense amount */
 }
 
 .transaction-detail-item .secondCol {
@@ -262,8 +285,8 @@ input[type="text"] {
   margin: 30px auto;
   padding: 25px;
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
+  backdrop-filter: blur(12px) saturate(150%);
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.4);
@@ -284,7 +307,8 @@ input[type="text"] {
 .add-category-expense-form input[type="number"] {
   width: 100%;
   padding: 12px 15px;
-  box-sizing: border-box; /* Add this line to fix overflow */
+  box-sizing: border-box;
+  /* Add this line to fix overflow */
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.1);
@@ -302,12 +326,14 @@ input[type="text"] {
 
 .add-category-expense-form select:focus,
 .add-category-expense-form input[type="number"]:focus {
-  border-color: #8a2be2; /* BlueViolet on focus */
+  border-color: #8a2be2;
+  /* BlueViolet on focus */
   box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.3);
 }
 
 .add-category-expense-form button[type="submit"] {
-  background-color: #8a2be2; /* BlueViolet */
+  background-color: #8a2be2;
+  /* BlueViolet */
   color: #ffffff;
   border: none;
   padding: 12px 20px;
@@ -321,7 +347,8 @@ input[type="text"] {
 }
 
 .add-category-expense-form button[type="submit"]:hover {
-  background-color: #7b1fa2; /* Darker BlueViolet */
+  background-color: #7b1fa2;
+  /* Darker BlueViolet */
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
@@ -335,11 +362,13 @@ input[type="text"] {
   background-repeat: no-repeat;
   background-position: right 15px top 50%;
   background-size: 12px;
-  padding-right: 40px; /* Make space for the arrow */
+  padding-right: 40px;
+  /* Make space for the arrow */
 }
 
 /* Ensure options text is visible */
 .add-category-expense-form select option {
-  background-color: #5d3f8e; /* Darker purple for dropdown options */
+  background-color: #5d3f8e;
+  /* Darker purple for dropdown options */
   color: #ffffff;
 }

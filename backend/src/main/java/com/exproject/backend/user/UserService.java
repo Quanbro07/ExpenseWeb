@@ -150,4 +150,16 @@ public class UserService {
 
         return new ResponseEntity<>(existuser.isActive(),HttpStatus.OK);
     }
+
+    @Transactional
+    public ResponseEntity<UserResponseDTO> resetPassword(Long id, String newPassword) {
+        User existUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found"));
+
+        existUser.setPassword(newPassword);
+        userRepository.save(existUser);
+
+        UserResponseDTO userResponseDTO = new UserResponseDTO(existUser);
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
+    }
 }
