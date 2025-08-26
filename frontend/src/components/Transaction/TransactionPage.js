@@ -1,12 +1,25 @@
 import { useState, useEffect } from "react";
-import DateSelector from "./DateSelector";
 import AddDailyExpense from "./AddDailyExpense";
 import AddCategoryExpense from "./AddCategoryExpense";
-import ExpenseList from "./ExpenseList";
+import DailyTransactionList from "./DailyTransactionList"; // Import DailyTransactionList
+import DateSelector from "./DateSelector";
 import "../../styles/TransactionPage.css";
 
 export default function TransactionPage({ userId }) {
-  const [selectedDate, setSelectedDate] = useState("");
+  const formatToYYYYMMDD = (dateString) => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return ""; // Return empty string for invalid dates
+    }
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const [selectedDate, setSelectedDate] = useState(
+    formatToYYYYMMDD(new Date()) // Initialize with current date in YYYY-MM-DD format
+  );
   const [showForm, setShowForm] = useState(null); // "daily" | "category" | null
   const [currentExpense, setCurrentExpense] = useState(null);
 
@@ -14,6 +27,12 @@ export default function TransactionPage({ userId }) {
   useEffect(() => {
     const fetchExpenseForDate = async () => {
       if (userId && selectedDate) {
+        console.log(
+          "Fetching expense for userId:",
+          userId,
+          "and selectedDate:",
+          selectedDate
+        ); // Added console.log
         try {
           const res = await fetch(
             `http://localhost:8080/api/v1/expense/get?userId=${userId}&expenseDate=${selectedDate}`
@@ -38,6 +57,12 @@ export default function TransactionPage({ userId }) {
 
   const handleReload = async () => {
     if (userId && selectedDate) {
+      console.log(
+        "Reloading expense for userId:",
+        userId,
+        "and selectedDate:",
+        selectedDate
+      ); // Added console.log
       try {
         const res = await fetch(
           `http://localhost:8080/api/v1/expense/get?userId=${userId}&expenseDate=${selectedDate}`
@@ -58,33 +83,29 @@ export default function TransactionPage({ userId }) {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleReload();
+    }
+  };
+
   return (
-    <div className="transaction-page">
+    <div className="transaction-page" onKeyDown={handleKeyDown} tabIndex={0}>
       <h2>Giao dịch chi tiêu</h2>
 
       {/* Chọn ngày */}
       <DateSelector
         selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate} // ✅ sửa: dùng setSelectedDate thay vì onDateChange
+        setSelectedDate={setSelectedDate}
         onFetch={handleReload}
       />
 
       {/* Hai nút điều khiển */}
       <div className="button-group">
         <button
-          className="transaction-button daily-expense-button"
-          onClick={() => setShowForm("daily")}
-        >
-          ➕ Thêm Tổng chi tiêu
-        </button>
-        <button
           className="transaction-button category-expense-button"
           onClick={() => {
-            if (!currentExpense) {
-              alert("⚠️ Bạn cần thêm tổng chi tiêu trước!");
-              return;
-            }
-            setShowForm("category");
+            setShowForm("category"); // No longer dependent on currentExpense
           }}
         >
           ➕ Thêm Chi tiêu từng loại
@@ -92,23 +113,20 @@ export default function TransactionPage({ userId }) {
       </div>
 
       {/* Form hiển thị theo nút bấm */}
-      {showForm === "daily" && (
-        <AddDailyExpense
-          onAdd={handleReload}
-          userId={userId}
-          selectedDate={selectedDate}
-        />
-      )}
-
-      {showForm === "category" && currentExpense && (
+      {showForm === "category" && (
         <AddCategoryExpense
           onAddCategory={handleReload}
-          expenseId={currentExpense.expenseId} // ✅ chỉ truyền expenseId
+          userId={userId} // Pass userId
+          selectedDate={selectedDate} // Pass selectedDate
+          expenseId={currentExpense?.expenseId} // Optional: still pass if exists for existing update logic
         />
       )}
 
-      {/* Danh sách chi tiêu trong ngày */}
-      <ExpenseList categories={currentExpense?.expenseCategoryList || []} />
+      {/* Danh sách giao dịch trong ngày */}
+      <DailyTransactionList
+        userId={userId} // Pass userId back
+        selectedDate={selectedDate}
+      />
     </div>
   );
 }

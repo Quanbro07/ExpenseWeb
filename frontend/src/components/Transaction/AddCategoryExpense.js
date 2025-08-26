@@ -1,16 +1,65 @@
 import { useState } from "react";
 
-export default function AddCategoryExpense({ expenseId, onAddCategory }) {
+export default function AddCategoryExpense({
+  expenseId,
+  userId,
+  selectedDate,
+  onAddCategory,
+}) {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("FoodAndDrink");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let currentExpenseId = expenseId; // Bắt đầu với expenseId hiện có nếu có
+
+    // Nếu chưa có expenseId cho ngày này, tạo một tổng chi tiêu mới trước
+    if (!currentExpenseId) {
+      try {
+        const createExpenseRes = await fetch(
+          "http://localhost:8080/api/v1/expense/create",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: userId,
+              expenseDate: selectedDate,
+              amount: 0, // Khởi tạo tổng chi tiêu là 0
+              description: "Tổng chi tiêu trong ngày",
+            }),
+          }
+        );
+
+        if (!createExpenseRes.ok) {
+          // Nếu có conflict, tức là expense đã tồn tại, chúng ta có thể bỏ qua hoặc fetch lại expenseId
+          if (createExpenseRes.status === 409) {
+            const getExpenseRes = await fetch(
+              `http://localhost:8080/api/v1/expense/get?userId=${userId}&expenseDate=${selectedDate}`
+            );
+            if (getExpenseRes.ok) {
+              const existingExpense = await getExpenseRes.json();
+              currentExpenseId = existingExpense.expenseId;
+            } else {
+              throw new Error("Không thể lấy Expense ID đã tồn tại.");
+            }
+          } else {
+            throw new Error("Không thể tạo tổng chi tiêu mới.");
+          }
+        }
+        const newExpense = await createExpenseRes.json();
+        currentExpenseId = newExpense.expenseId; // Cập nhật expenseId mới
+      } catch (err) {
+        console.error("Lỗi khi tạo tổng chi tiêu:", err);
+        alert("Có lỗi khi tạo tổng chi tiêu cho ngày này.");
+        return;
+      }
+    }
+
     const categoryData = {
       amount: parseFloat(amount),
       expenseCategory: category,
-      expenseId: expenseId,
+      expenseId: currentExpenseId,
     };
 
     try {
@@ -51,7 +100,7 @@ export default function AddCategoryExpense({ expenseId, onAddCategory }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="add-category-expense-form">
       <h3>Thêm chi tiêu theo loại</h3>
       <select value={category} onChange={(e) => setCategory(e.target.value)}>
         <option value="FoodAndDrink">Ăn uống</option>

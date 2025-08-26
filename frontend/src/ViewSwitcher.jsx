@@ -24,7 +24,10 @@ export default function ViewSwitcher({ user, expenseList }) {
       </div>
 
       {view === "transactions" ? (
-        <Transactions user={user} expenseList={expenseList} />
+        <>
+          {/* Render Transactions component */}
+          <Transactions user={user} expenseList={expenseList} />
+        </>
       ) : (
         <StatisticDashboard transactions={expenseList} />
       )}

@@ -4,7 +4,7 @@ import RegisterForm from "./RegisterForm";
 import FinanceForm from "./FinanceForm";
 import ProfileShow from "./pages/ProfileShow";
 import TransactionPage from "./components/Transaction/TransactionPage";
-import Transaction from "./Transaction";
+import StatisticDashboard from "./StatisticDashboard"; // Import StatisticDashboard
 import NavBar from "./NavigationBar";
 import "./App.css";
 import AdminPage from "./AdminPage";
@@ -113,7 +113,7 @@ function App() {
 
   return (
     <>
-      {currentForm !== "login" && currentForm !== "register" && (
+      {userData && ( // NavBar hiển thị khi có userData (người dùng đã đăng nhập)
         <NavBar onNavigate={(page) => setCurrentForm(page)} />
       )}
       <div style={{ textAlign: "center", marginTop: "10px" }}>
@@ -154,23 +154,20 @@ function App() {
         )}
 
         {currentForm === "transaction" && userData && (
-          <>
-            <TransactionPage
-              userId={userData.id}
-              user={userData}
-              onBack={() => setCurrentForm("profile")}
-              onSuccess={() => {
-                handleFetchAllExpenses(userData.id);
-                handleFetchBalance(userData.id);
-              }}
-            />
-            <Transaction
-              user={userData}
-              expenseList={expenseList}
-              onFetchAll={handleFetchAllExpenses}
-            />
-          </>
+          <TransactionPage
+            userId={userData.id}
+            onBack={() => setCurrentForm("profile")}
+            onSuccess={() => {
+              handleFetchAllExpenses(userData.id);
+              handleFetchBalance(userData.id);
+            }}
+          />
         )}
+
+        {currentForm === "statistics" && userData && (
+          <StatisticDashboard transactions={expenseList} />
+        )}
+
         {currentForm === "admin" && <AdminPage />}
       </div>
     </>
