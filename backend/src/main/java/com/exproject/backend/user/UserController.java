@@ -67,4 +67,5 @@ public class UserController {
         @RequestParam(name="state") boolean state) {
         return userService.changeUserActiveState(id,state);
     }
+
 }

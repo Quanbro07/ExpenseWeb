@@ -23,6 +23,7 @@ public class Balance {
     private Double currentBalance;
     private Double salary;
     private Double monthlyLimitedExpense;
+    @Builder.Default
     private Double monthlyExpense = 0.0;
     private LocalDate update_at;
 
