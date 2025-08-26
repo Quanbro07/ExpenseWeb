@@ -4,7 +4,7 @@ import RegisterForm from "./RegisterForm";
 import FinanceForm from "./FinanceForm";
 import ProfileShow from "./pages/ProfileShow";
 import TransactionPage from "./components/Transaction/TransactionPage";
-import Transaction from "./Transaction";
+import StatisticDashboard from "./StatisticDashboard"; // Import StatisticDashboard
 import NavBar from "./NavigationBar";
 import "./App.css";
 import AdminPage from "./AdminPage";
@@ -98,10 +98,12 @@ function App() {
       console.log("👤 User từ backend:", fullUser);
       setUserData(fullUser);
 
-      if (fullUser.role === "Admin") { // Changed 0 to "Admin"
+      if (fullUser.role === "Admin") {
+        // Changed 0 to "Admin"
         setCurrentForm("admin");
         return; // Dừng ở đây nếu là admin
-      } else if (fullUser.role === 1) { // Added else if for user role
+      } else if (fullUser.role === 1) {
+        // Added else if for user role
         await handleFetchAllExpenses(fullUser.id);
         await handleFetchBalance(fullUser.id);
         setCurrentForm("profile");
@@ -121,9 +123,11 @@ function App() {
 
   return (
     <>
-      {currentForm !== "login" && currentForm !== "register" && currentForm !== "admin" && (
-        <NavBar onNavigate={(page) => setCurrentForm(page)} />
-      )}
+      {currentForm !== "login" &&
+        currentForm !== "register" &&
+        currentForm !== "admin" && (
+          <NavBar onNavigate={(page) => setCurrentForm(page)} />
+        )}
 
       <div className="app-container">
         {currentForm === "login" && (
@@ -149,23 +153,20 @@ function App() {
         )}
 
         {currentForm === "transaction" && userData && (
-          <>
-            <TransactionPage
-              userId={userData.id}
-              user={userData}
-              onBack={() => setCurrentForm("profile")}
-              onSuccess={() => {
-                handleFetchAllExpenses(userData.id);
-                handleFetchBalance(userData.id);
-              }}
-            />
-            <Transaction
-              user={userData}
-              expenseList={expenseList}
-              onFetchAll={handleFetchAllExpenses}
-            />
-          </>
+          <TransactionPage
+            userId={userData.id}
+            onBack={() => setCurrentForm("profile")}
+            onSuccess={() => {
+              handleFetchAllExpenses(userData.id);
+              handleFetchBalance(userData.id);
+            }}
+          />
         )}
+
+        {currentForm === "statistics" && userData && (
+          <StatisticDashboard transactions={expenseList} />
+        )}
+
         {currentForm === "admin" && <AdminPage />}
       </div>
     </>

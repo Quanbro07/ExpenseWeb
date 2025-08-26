@@ -6,14 +6,23 @@ export default function DateSelector({
   onFetch,
 }) {
   const handleChange = (e) => {
-    setSelectedDate(e.target.value); // cập nhật ngày khi người dùng chọn
+    const newDateValue = e.target.value;
+    setSelectedDate(newDateValue); // Pass the raw value from input to parent
+    if (newDateValue) {
+      onFetch(); // Tự động fetch khi ngày thay đổi
+    }
   };
 
   return (
     <div className="date-range">
-      <label>Chọn ngày:</label>
-      <input type="date" value={selectedDate} onChange={handleChange} />
-      <button onClick={onFetch}>Lấy dữ liệu</button>
+      <label htmlFor="date-input">Ngày:</label>
+      <input
+        id="date-input"
+        type="date"
+        value={selectedDate} // Value will be formatted by parent now
+        onChange={handleChange}
+      />
+      {/* Removed the "Lấy dữ liệu" button */}
     </div>
   );
 }
