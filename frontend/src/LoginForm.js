@@ -29,7 +29,8 @@ export default function LoginForm({ onSwitch, onLoginSuccess }) {
         onLoginSuccess(data);
       }
     } catch (err) {
-      alert("❌ Lỗi kết nối tới server!");
+      console.error("Login Error:", err); // Log the error for debugging
+      alert("❌ Lỗi kết nối tới server hoặc xử lý phản hồi!"); // More specific message
     } finally {
       setLoading(false);
     }

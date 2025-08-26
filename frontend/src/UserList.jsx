@@ -27,19 +27,33 @@ export default function UserList() {
 
     const updateUserStatus = async (id, action) => {
         try {
-            const url =
-                action === "delete"
-                    ? `http://localhost:8080/api/v1/user/delete/${id}`
-                    : `http://localhost:8080/api/v1/user/${action}/${id}`;
+            let url;
+            let method;
+
+            if (action === "delete") {
+                if (!window.confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) {
+                    return; // Người dùng hủy xóa
+                }
+                url = `http://localhost:8080/api/v1/user/delete?id=${id}`;
+                method = "DELETE";
+            } else if (action === "activate" || action === "deactivate") {
+                // Logic cũ cho activate/deactivate (sẽ được cập nhật sau)
+                url = `http://localhost:8080/api/v1/user/changeActive?userId=${id}&state=${action === "activate"}`;
+                method = "PUT";
+            } else {
+                // Default case or error
+                return;
+            }
 
             const res = await fetch(url, {
-                method: action === "delete" ? "DELETE" : "PUT",
+                method: method,
             });
 
             if (!res.ok) throw new Error("Cập nhật thất bại");
             alert("✅ Cập nhật thành công");
             fetchUsers();
-        } catch {
+        } catch (err) {
+            console.error("Error updating user status:", err);
             alert("❌ Lỗi khi cập nhật trạng thái người dùng");
         }
     };
@@ -100,15 +114,15 @@ export default function UserList() {
                                 <td>{user.id}</td>
                                 <td>{user.userName}</td>
                                 <td>{user.email}</td>
-                                <td>{user.active ? "✅ Hoạt động" : "❌ Đã khóa"}</td>
+                                <td>{user.isActive ? "✅ Hoạt động" : "❌ Đã khóa"}</td>
                                 <td className="actions">
                                     <button
                                         className="actionButton"
                                         onClick={() =>
-                                            updateUserStatus(user.id, user.active ? "deactivate" : "activate")
+                                            updateUserStatus(user.id, user.isActive ? "deactivate" : "activate")
                                         }
                                     >
-                                        {user.active ? "Deactivate" : "Reactivate"}
+                                        {user.isActive ? "Deactivate" : "Reactivate"}
                                     </button>
                                     <button className="actionButton" onClick={() => updateUserStatus(user.id, "delete")}>
                                         Xóa
