@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 @RestController
 @RequestMapping("api/v1/user")
 public class UserController {
@@ -66,5 +66,13 @@ public class UserController {
     public ResponseEntity<Boolean> changeUserActiveState(@RequestParam(name = "userId") Long id,
         @RequestParam(name="state") boolean state) {
         return userService.changeUserActiveState(id,state);
+    }
+
+    // Reset Password for User (Admin Functionality)
+    @PutMapping("/resetPassword")
+    public ResponseEntity<UserResponseDTO> resetPassword(
+            @RequestParam Long id,
+            @RequestBody UserRequestDTO userRequestDTO) {
+        return userService.resetPassword(id, userRequestDTO.getPassword());
     }
 }

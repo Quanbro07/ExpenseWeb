@@ -98,38 +98,37 @@ function App() {
       console.log("👤 User từ backend:", fullUser);
       setUserData(fullUser);
 
-      if (fullUser.role === "ADMIN") {
+      if (fullUser.role === "Admin") {
+        // Changed 0 to "Admin"
         setCurrentForm("admin");
         return; // Dừng ở đây nếu là admin
+      } else if (fullUser.role === 1) {
+        // Added else if for user role
+        await handleFetchAllExpenses(fullUser.id);
+        await handleFetchBalance(fullUser.id);
+        setCurrentForm("profile");
+        return; // Dừng ở đây nếu là user
       }
-
+      // If role is neither 0 nor 1, you might want a default behavior or an error.
+      // For now, I'll keep the existing line for profile as a fallback if role is not 0.
+      // If you want to handle other roles, you would add more else if conditions.
       await handleFetchAllExpenses(fullUser.id);
       await handleFetchBalance(fullUser.id);
       setCurrentForm("profile");
     } catch (err) {
+      console.error("Login Success Data Fetch Error:", err); // Log the detailed error
       alert("Lỗi khi lấy dữ liệu người dùng từ backend");
     }
   };
 
   return (
     <>
-      {userData && ( // NavBar hiển thị khi có userData (người dùng đã đăng nhập)
-        <NavBar onNavigate={(page) => setCurrentForm(page)} />
-      )}
-      <div style={{ textAlign: "center", marginTop: "10px" }}>
-        <button
-          onClick={() => setCurrentForm("admin")}
-          className="SettingButton"
-        >
-          🔧 Mở Admin (DEV)
-        </button>
-        <button
-          onClick={() => setCurrentForm("profile")}
-          className="SettingButton"
-        >
-          👤 Mở Profile (DEV)
-        </button>
-      </div>
+      {currentForm !== "login" &&
+        currentForm !== "register" &&
+        currentForm !== "admin" && (
+          <NavBar onNavigate={(page) => setCurrentForm(page)} />
+        )}
+
       <div className="app-container">
         {currentForm === "login" && (
           <LoginForm
