@@ -1,8 +1,11 @@
 package com.exproject.backend.expenseCategory;
 
+import com.exproject.backend.expense.dto.ExpenseRequestDTO;
 import com.exproject.backend.expenseCategory.expenseCategoryDTO.ExpenseCategoryRequestDTO;
 import com.exproject.backend.expenseCategory.expenseCategoryDTO.ExpenseCategoryResponseDTO;
+import com.exproject.backend.expenseCategory.expenseCategoryInfo.ExpenseCategory;
 import com.exproject.backend.expenseCategory.expenseCategoryInfo.ExpenseCategoryEnum;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,7 @@ import java.util.List;
 public class ExpenseCategoryController {
     private final ExpenseCategoryService expenseCategoryService;
 
+    @Autowired
     public ExpenseCategoryController(ExpenseCategoryService expenseCategoryService) {
         this.expenseCategoryService = expenseCategoryService;
     }

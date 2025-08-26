@@ -16,13 +16,13 @@ public class UserResponseDTO {
     private String userName;
     private String email;
     private UserRole role;
-    private boolean isActive; // Added isActive field
+    private Boolean isActive;
 
     public UserResponseDTO(User user) {
         this.id = user.getId();
         this.userName = user.getUserName();
         this.email = user.getEmail();
         this.role = user.getRole();
-        this.isActive = user.isActive(); // Initialize isActive
+        this.isActive = user.isActive();
     }
 }

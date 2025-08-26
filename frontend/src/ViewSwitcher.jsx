@@ -30,7 +30,7 @@ export default function ViewSwitcher({ user, expenseList }) {
           <Transactions user={user} expenseList={expenseList} />
         </>
       ) : (
-        <StatisticDashboard transactions={expenseList} />
+        <StatisticDashboard user={user} transactions={expenseList} />
       )}
     </div>
   );

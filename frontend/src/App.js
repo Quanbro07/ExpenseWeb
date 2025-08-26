@@ -154,7 +154,7 @@ function App() {
 
         {currentForm === "transaction" && userData && (
           <TransactionPage
-            userId={userData.id}
+            user={userData} // Pass the entire user object
             onBack={() => setCurrentForm("profile")}
             onSuccess={() => {
               handleFetchAllExpenses(userData.id);
