@@ -34,7 +34,7 @@ export default function Transactions({ user, expenseList }) {
 
       {visibleCount < expenseList.length && (
         <div style={{ textAlign: "center", marginTop: "15px" }}>
-          <button className="buttonView1" onClick={showMore}>
+          <button className="buttonView" onClick={showMore}>
             Xem thêm
           </button>
         </div>

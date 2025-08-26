@@ -8,12 +8,19 @@ import StatisticDashboard from "./StatisticDashboard"; // Import StatisticDashbo
 import NavBar from "./NavigationBar";
 import "./App.css";
 import AdminPage from "./AdminPage";
+import CustomAlert from "./components/CustomAlert"; // Import CustomAlert
 
 function App() {
   const [currentForm, setCurrentForm] = useState("login");
   const [isNewUser, setIsNewUser] = useState(false);
   const [userData, setUserData] = useState(null);
   const [expenseList, setExpenseList] = useState([]);
+  const [alertMessage, setAlertMessage] = useState(null); // State for custom alert
+  const [alertType, setAlertType] = useState("error"); // State for custom alert type
+
+  const handleCloseAlert = () => {
+    setAlertMessage(null);
+  };
 
   // ✅ Lấy chi tiêu
   const handleFetchAllExpenses = async (userIdParam) => {
@@ -31,7 +38,8 @@ function App() {
       setExpenseList(data);
       console.log("✅ Chi tiêu từ frontend:", expenseList);
     } catch (err) {
-      alert("Lỗi khi tải dữ liệu chi tiêu người dùng");
+      setAlertMessage("Lỗi khi tải dữ liệu chi tiêu người dùng");
+      setAlertType("error");
       console.error(err);
     }
   };
@@ -55,7 +63,8 @@ function App() {
         balance: balanceData.currentBalance,
       }));
     } catch (err) {
-      alert("Lỗi khi lấy dữ liệu số dư người dùng");
+      setAlertMessage("Lỗi khi lấy dữ liệu số dư người dùng");
+      setAlertType("error");
       console.error(err);
     }
   };
@@ -82,7 +91,8 @@ function App() {
       // Lấy số dư mới
       await handleFetchBalance(updatedUser.id);
     } catch (err) {
-      alert("Lỗi khi tải lại thông tin sau khi nhập tài chính");
+      setAlertMessage("Lỗi khi tải lại thông tin sau khi nhập tài chính");
+      setAlertType("error");
     }
   };
 
@@ -96,6 +106,14 @@ function App() {
 
       const fullUser = await res.json();
       console.log("👤 User từ backend:", fullUser);
+
+      // Check isActive directly in frontend before proceeding
+      if (!fullUser.isActive) {
+        setAlertMessage("Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.");
+        setAlertType("error");
+        return; // Stop further execution and navigation
+      }
+
       setUserData(fullUser);
 
       if (fullUser.role === "Admin") {
@@ -117,12 +135,16 @@ function App() {
       setCurrentForm("profile");
     } catch (err) {
       console.error("Login Success Data Fetch Error:", err); // Log the detailed error
-      alert("Lỗi khi lấy dữ liệu người dùng từ backend");
+      setAlertMessage("Lỗi khi lấy dữ liệu người dùng từ backend");
+      setAlertType("error");
     }
   };
 
   return (
     <>
+      {alertMessage && (
+        <CustomAlert message={alertMessage} type={alertType} onClose={handleCloseAlert} />
+      )}
       {currentForm !== "login" &&
         currentForm !== "register" &&
         currentForm !== "admin" && (

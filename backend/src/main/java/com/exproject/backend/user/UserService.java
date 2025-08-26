@@ -72,6 +72,7 @@ public class UserService {
         }
 
         // Check if user is active
+        System.out.println("User isActive: " + existUser.isActive()); // Log isActive status
         if (!existUser.isActive()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.");
         }
