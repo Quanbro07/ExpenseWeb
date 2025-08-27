@@ -24,6 +24,7 @@ export default function TransactionPage({ user, onBack, onSuccess }) {
   const [currentExpense, setCurrentExpense] = useState(null);
   const [monthlyLimitedExpense, setMonthlyLimitedExpense] = useState(0); // New state
   const [currentMonthTotalExpense, setCurrentMonthTotalExpense] = useState(0); // New state
+  const [hasAlertShown, setHasAlertShown] = useState(false); // New state to control alert display
 
   // Fetch monthly limited expense
   useEffect(() => {
@@ -88,6 +89,11 @@ export default function TransactionPage({ user, onBack, onSuccess }) {
     fetchExpenseForDate();
   }, [user, selectedDate]);
 
+  // Reset hasAlertShown when selectedDate changes
+  useEffect(() => {
+    setHasAlertShown(false);
+  }, [selectedDate]);
+
   const handleReload = async () => {
     if (user && user.id) {
       console.log(
@@ -127,9 +133,11 @@ export default function TransactionPage({ user, onBack, onSuccess }) {
         // Check if monthly expense exceeds limit and show alert
         if (
           monthlyLimitedExpense > 0 &&
-          totalExpenseThisMonth > monthlyLimitedExpense
+          totalExpenseThisMonth > monthlyLimitedExpense &&
+          !hasAlertShown
         ) {
           alert("Vượt giới hạn chi tiêu hàng tháng! Vui lòng cân chỉnh lại.");
+          setHasAlertShown(true);
         }
 
         // Also re-fetch current day's expense
