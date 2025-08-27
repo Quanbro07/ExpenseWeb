@@ -17,6 +17,8 @@ function App() {
   const [expenseList, setExpenseList] = useState([]);
   const [alertMessage, setAlertMessage] = useState(null); // State for custom alert
   const [alertType, setAlertType] = useState("error"); // State for custom alert type
+  const [monthlyLimitedExpense, setMonthlyLimitedExpense] = useState(0);
+  const [currentMonthTotalExpense, setCurrentMonthTotalExpense] = useState(0);
 
   const handleCloseAlert = () => {
     setAlertMessage(null);
@@ -69,6 +71,28 @@ function App() {
     }
   };
 
+  // ✅ Lấy hạn mức và tổng chi tiêu tháng từ backend
+  const handleFetchMonthlyStatus = async (userIdParam) => {
+    const uid = userIdParam || userData?.id;
+    if (!uid) return;
+
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/v1/balance/get-monthly-status?userId=${uid}`
+      );
+      if (!res.ok) throw new Error("Không thể lấy hạn mức và tổng chi tiêu tháng");
+
+      const data = await res.json();
+      setMonthlyLimitedExpense(data.monthlyLimitedExpense || 0);
+      setCurrentMonthTotalExpense(data.monthlyExpense || 0); // Use monthlyExpense from backend
+
+    } catch (err) {
+      setAlertMessage("Lỗi khi lấy dữ liệu hạn mức và tổng chi tiêu tháng");
+      setAlertType("error");
+      console.error(err);
+    }
+  };
+
   // ✅ Đăng ký → sang nhập tài chính
   const handleRegister = (userInfo) => {
     setIsNewUser(true);
@@ -88,8 +112,9 @@ function App() {
       setUserData(updatedUser);
       setCurrentForm("profile");
 
-      // Lấy số dư mới
+      // Lấy số dư mới và trạng thái hàng tháng
       await handleFetchBalance(updatedUser.id);
+      await handleFetchMonthlyStatus(updatedUser.id);
     } catch (err) {
       setAlertMessage("Lỗi khi tải lại thông tin sau khi nhập tài chính");
       setAlertType("error");
@@ -124,6 +149,7 @@ function App() {
         // Added else if for user role
         await handleFetchAllExpenses(fullUser.id);
         await handleFetchBalance(fullUser.id);
+        await handleFetchMonthlyStatus(fullUser.id); // Call to fetch monthly status
         setCurrentForm("profile");
         return; // Dừng ở đây nếu là user
       }
@@ -132,6 +158,7 @@ function App() {
       // If you want to handle other roles, you would add more else if conditions.
       await handleFetchAllExpenses(fullUser.id);
       await handleFetchBalance(fullUser.id);
+      await handleFetchMonthlyStatus(fullUser.id); // Call to fetch monthly status
       setCurrentForm("profile");
     } catch (err) {
       console.error("Login Success Data Fetch Error:", err); // Log the detailed error
@@ -173,7 +200,12 @@ function App() {
         )}
 
         {currentForm === "profile" && userData && (
-          <ProfileShow user={userData} expenseList={expenseList} />
+          <ProfileShow
+            user={userData}
+            expenseList={expenseList}
+            monthlyLimitedExpense={monthlyLimitedExpense}
+            currentMonthTotalExpense={currentMonthTotalExpense}
+          />
         )}
 
         {currentForm === "transaction" && userData && (
@@ -183,12 +215,17 @@ function App() {
             onSuccess={() => {
               handleFetchAllExpenses(userData.id);
               handleFetchBalance(userData.id);
+              handleFetchMonthlyStatus(userData.id); // Also re-fetch monthly status on success
             }}
           />
         )}
 
         {currentForm === "statistics" && userData && (
-          <StatisticDashboard transactions={expenseList} />
+          <StatisticDashboard
+            transactions={expenseList}
+            monthlyLimitedExpense={monthlyLimitedExpense}
+            currentMonthTotalExpense={currentMonthTotalExpense}
+          />
         )}
 
         {currentForm === "admin" && <AdminPage />}
