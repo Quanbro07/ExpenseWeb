@@ -129,16 +129,16 @@ public class BalanceService {
         balanceRepository.saveAll(balanceList);
     }
 
-    // Cập nhật Balance theo từng ngày dựa vào expense hôm qua
+    // Cập nhật Balance theo trong quá khứ kể từ now
     // Trừ balance
     // Công thêm vào Monthly Expense
     // *TEST: mỗi 1p
     // *RealTime: mỗi ngày
     public void manageBalanceDaily() {
         System.out.println("[MANAGE DAILY]");
-        LocalDate yesterday = LocalDate.now().minusDays(1);
+        LocalDate now = LocalDate.now();
 
-        List<Expense> expenseList = expenseRepository.findAllByExpenseDate(yesterday);
+        List<Expense> expenseList = expenseRepository.findAllByIsAppliedFalseAndExpenseDateBefore(now);
 
         for(Expense expense : expenseList) {
             // Đã applied thì pass

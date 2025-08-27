@@ -33,6 +33,7 @@ public class Expense {
 
     private Double amount;
     private String description;
+    @Builder.Default
     private Boolean isApplied = false;
 
     @ManyToOne

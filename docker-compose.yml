@@ -33,6 +33,21 @@ services:
     networks:
       - backend
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: webproj-frontend
+    depends_on:
+      - backend
+    environment:
+      - HOST=0.0.0.0
+    ports:
+      - "3000:3000"
+    networks:
+      - backend
+    restart: unless-stopped
+
 networks:
   backend:
     driver: bridge

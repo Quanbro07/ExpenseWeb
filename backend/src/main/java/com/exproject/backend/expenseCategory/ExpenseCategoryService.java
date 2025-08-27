@@ -55,8 +55,6 @@ public class ExpenseCategoryService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Expense Category Already Exists");
         }
 
-
-
         ExpenseCategory newExpenseCategory = ExpenseCategory.builder()
                 .amount(expenseCategoryRequestDTO.getAmount())
                 .expenseCategory(expenseCategoryRequestDTO.getExpenseCategory())
@@ -122,7 +120,7 @@ public class ExpenseCategoryService {
         Expense existExpense = expenseRepository.findById(expenseCategoryRequestDTO.getExpenseId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense Not Found"));
 
-        // Nếu update Expense Category ở quá khứ
+        // Nếu update Expense Category đã đươc applied
         if(existExpense.getIsApplied()) {
             LocalDate today = LocalDate.now();
             LocalDate expenseDate = existExpense.getExpenseDate();
