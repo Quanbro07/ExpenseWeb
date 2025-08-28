@@ -33,7 +33,7 @@ function dataPrep(transactions) {
       const dateString = tx.expenseDate.replace(/\//g, "-");
       txDate = parse(dateString, "yyyy-MM-dd", new Date());
     } catch (e) {
-      console.error("❌ Không thể parse ngày:", tx.expenseDate);
+      console.error("❌ Không thể parse ngày:", tx.expenseDate, e);
       return;
     }
 

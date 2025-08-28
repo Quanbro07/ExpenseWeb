@@ -1,7 +1,7 @@
 import "./UserCard.css";
 import avatar from "./avatar.svg";
 
-export default function UserCard({ user }) {
+export default function UserCard({ user, monthlyLimitedExpense, currentMonthTotalExpense }) {
   console.log("👤 Full user object:", user);
 
   if (!user) {
@@ -16,8 +16,17 @@ export default function UserCard({ user }) {
           <div className="name">{user.userName || "Không tên"}</div>
           <div className="id">ID: {user?.id || "?"}</div>
           <div className="balance">
-            Số dư: {user?.balance?.toLocaleString() || 0} VNĐ
+            Số dư: {user?.balance?.toLocaleString('vi-VN') || 0} VNĐ
           </div>{" "}
+          <div className="monthly-limit">
+            Hạn mức chi tiêu tháng: {monthlyLimitedExpense.toLocaleString('vi-VN')} VNĐ
+          </div>
+          <div className="monthly-total-expense">
+            Tổng chi tiêu tháng này: {currentMonthTotalExpense.toLocaleString('vi-VN')} VNĐ
+          </div>
+          <div className="monthly-remaining">
+            Còn lại: {(monthlyLimitedExpense - currentMonthTotalExpense).toLocaleString('vi-VN')} VNĐ
+          </div>
         </div>{" "}
       </div>
     </div>

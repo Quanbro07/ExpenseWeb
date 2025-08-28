@@ -31,7 +31,7 @@
 }
 
 .information {
-  padding-left: 200px;
+  padding-left: 160px;
   padding-right: 200px;
   display: flex;
   flex-direction: column;
@@ -55,9 +55,18 @@
   font-weight: 500;
 }
 
-.balance {
+/* .balance {
   font-size: 40px;
   font-weight: 500;
   padding-top: 20px;
   padding-bottom: 20px;
+} */
+
+.monthly-limit,
+.balance,
+.monthly-total-expense,
+.monthly-remaining {
+  font-size: 25px;
+  font-weight: 500;
+  padding-bottom: 10px;
 }
