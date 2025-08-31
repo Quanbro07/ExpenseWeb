@@ -49,6 +49,7 @@ export default function AddCategoryExpense({
         }
         const newExpense = await createExpenseRes.json();
         currentExpenseId = newExpense.expenseId; // Cập nhật expenseId mới
+        console.log(currentExpenseId);
       } catch (err) {
         console.error("Lỗi khi tạo tổng chi tiêu:", err);
         alert("Có lỗi khi tạo tổng chi tiêu cho ngày này.");
@@ -72,7 +73,7 @@ export default function AddCategoryExpense({
           body: JSON.stringify(categoryData),
         }
       );
-
+      console.log(categoryData);
       // Nếu đã tồn tại category → update thay thế
       if (res.status === 409) {
         console.log("Category existed → updating instead...");
@@ -86,7 +87,10 @@ export default function AddCategoryExpense({
         );
       }
 
-      if (!res.ok) throw new Error("Failed to add/update expense category");
+      if (!res.ok) {
+        console.error("Response not OK, status:", res.status);
+        throw new Error("Failed to add/update expense category");
+      }
 
       const data = await res.json();
       console.log("✅ Category saved:", data);
@@ -94,7 +98,7 @@ export default function AddCategoryExpense({
       setAmount("");
       setCategory("FoodAndDrink");
     } catch (err) {
-      console.error(err);
+      console.error("Caught error:", err);
       alert("Có lỗi khi lưu Category");
     }
   };
