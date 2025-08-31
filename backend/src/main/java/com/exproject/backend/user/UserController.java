@@ -1,5 +1,6 @@
 package com.exproject.backend.user;
 
+import com.exproject.backend.user.dto.PasswordUpdateRequest;
 import com.exproject.backend.user.dto.UserRequestDTO;
 import com.exproject.backend.user.dto.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,15 @@ public class UserController {
     public ResponseEntity<Boolean> changeUserActiveState(@RequestParam(name = "userId") Long id,
         @RequestParam(name="state") boolean state) {
         return userService.changeUserActiveState(id,state);
+    }
+
+    // Update password
+    @PutMapping("/updatePassword/{id}")
+    public ResponseEntity<UserResponseDTO> updatePassword(
+            @PathVariable Long id,
+            @RequestBody PasswordUpdateRequest newPassword)
+    {
+        return userService.updatePassword(id,newPassword);
     }
 
 }

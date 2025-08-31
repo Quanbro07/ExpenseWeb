@@ -4,6 +4,7 @@ import com.exproject.backend.dailyExpenseSetting.DailyExpenseSettingRepository;
 import com.exproject.backend.dailyExpenseSetting.DailyExpenseSettingService;
 import com.exproject.backend.dailyExpenseSetting.dailyExpenseSettingInfo.DailyExpenseSetting;
 import com.exproject.backend.dailyExpenseSetting.dto.DailyExpenseSettingRequestDTO;
+import com.exproject.backend.user.dto.PasswordUpdateRequest;
 import com.exproject.backend.user.dto.UserRequestDTO;
 import com.exproject.backend.user.dto.UserResponseDTO;
 import com.exproject.backend.user.userInfo.User;
@@ -151,5 +152,17 @@ public class UserService {
         userRepository.save(existuser);
 
         return new ResponseEntity<>(existuser.isActive(),HttpStatus.OK);
+    }
+
+    // Update Password
+    public ResponseEntity<UserResponseDTO> updatePassword(Long id, PasswordUpdateRequest newPassword) {
+        User existUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Id Not Found"));
+
+        existUser.setPassword(newPassword.getNewPassword());
+        userRepository.save(existUser);
+
+        UserResponseDTO userResponseDTO = new UserResponseDTO(existUser);
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
 }
