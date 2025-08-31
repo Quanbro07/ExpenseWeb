@@ -2,6 +2,7 @@ package com.exproject.backend.expense;
 
 import com.exproject.backend.expense.dto.ExpenseRequestDTO;
 import com.exproject.backend.expense.dto.ExpenseResponseDTO;
+import com.exproject.backend.expense.dto.ExpenseResponseIdDTO;
 import com.exproject.backend.expense.expenseInfo.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,0 +1,374 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.transaction-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: none;
+  /* Remove border */
+  border-radius: 8px;
+  background-color: #5d3f8e;
+  /* Darker purple for the container */
+}
+
+h2 {
+  text-align: center;
+  color: #ffffff;
+  /* White color for heading */
+  font-size: 32px;
+  /* Increased font size */
+  font-weight: 700;
+  /* Bolder font weight */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  /* Add text shadow */
+  margin-bottom: 25px;
+  /* Add some space below the title */
+}
+
+.date-range,
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #ffffff;
+  /* White color for labels */
+}
+
+input[type="date"],
+input[type="number"],
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #bb8fce;
+  /* Lighter purple border for inputs */
+  border-radius: 4px;
+  background-color: #ffffff;
+  /* White background for inputs */
+  color: #333;
+  /* Dark text for inputs */
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.transaction-button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.daily-expense-button {
+  background-color: #ffffff;
+  /* White background */
+  color: #5d3f8e;
+  /* Darker purple text */
+}
+
+.daily-expense-button:hover {
+  background-color: #f0f0f0;
+}
+
+.category-expense-button {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+.category-expense-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.expense-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.expense-table th,
+.expense-table td {
+  border: 1px solid #bb8fce;
+  /* Lighter purple border for table */
+  padding: 10px;
+  text-align: left;
+  color: #ffffff;
+  /* White text for table cells */
+}
+
+.expense-table th {
+  background-color: #7b58a1;
+  /* Medium purple for table header */
+  color: #ffffff;
+}
+
+.no-expenses {
+  text-align: center;
+  color: #ffffff;
+  /* White color for no expenses message */
+  margin-top: 20px;
+}
+
+.summary {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.expense-list {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #7b58a1;
+  /* Medium purple for expense list */
+  border-radius: 10px;
+}
+
+.expense-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.expense-list li {
+  padding: 6px 0;
+  font-size: 16px;
+}
+
+.category-name {
+  font-weight: 600;
+  color: #ffffff;
+  /* White for category name */
+}
+
+.category-amount {
+  color: #ffffff;
+  /* White for category amount */
+}
+
+/* Styles for DailyTransactionList - General */
+.daily-transaction-list,
+.daily-transaction-detail-list {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  color: #ffffff;
+}
+
+.daily-transaction-list h3,
+.daily-transaction-detail-list h3 {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.daily-transaction-list ul,
+.daily-transaction-detail-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Category Summary Items */
+.category-summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.category-summary-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+}
+
+.category-summary-item .category-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.category-summary-item .category-amount {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff6b6b;
+  /* Red for expense amount */
+}
+
+/* Detailed Transaction Items */
+.transaction-detail-item {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.transaction-detail-item .firstCol {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.transaction-detail-item .transdt {
+  font-size: 18px;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.transaction-detail-item .transmoney {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff6b6b;
+  /* Red for expense amount */
+}
+
+.transaction-detail-item .secondCol {
+  font-size: 16px;
+  color: #c0c0c0;
+}
+
+/* Back Button */
+.back-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* No transactions message */
+.no-transactions {
+  text-align: center;
+  color: #e0e0e0;
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+/* Styles for AddCategoryExpense Form */
+.add-category-expense-form {
+  max-width: 400px;
+  margin: 30px auto;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.add-category-expense-form h3 {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.add-category-expense-form select,
+.add-category-expense-form input[type="number"] {
+  width: 100%;
+  padding: 12px 15px;
+  box-sizing: border-box;
+  /* Add this line to fix overflow */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-category-expense-form select::placeholder,
+.add-category-expense-form input[type="number"]::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.add-category-expense-form select:focus,
+.add-category-expense-form input[type="number"]:focus {
+  border-color: #8a2be2;
+  /* BlueViolet on focus */
+  box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.3);
+}
+
+.add-category-expense-form button[type="submit"] {
+  background-color: #8a2be2;
+  /* BlueViolet */
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.add-category-expense-form button[type="submit"]:hover {
+  background-color: #7b1fa2;
+  /* Darker BlueViolet */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Styling for select dropdown arrow in modern browsers */
+.add-category-expense-form select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%20197.35l-114.3-114.3c-4.6-4.6-12-4.6-16.6%200l-114.3%20114.3c-4.6%204.6-4.6%2012%200%2016.6l16.6%2016.6c4.6%204.6%2012%204.6%2016.6%200l95.7-95.7l95.7%2095.7c4.6%204.6%2012%204.6%2016.6%200l16.6-16.6c4.7-4.6%204.7-12.1%200-16.7z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px top 50%;
+  background-size: 12px;
+  padding-right: 40px;
+  /* Make space for the arrow */
+}
+
+/* Ensure options text is visible */
+.add-category-expense-form select option {
+  background-color: #5d3f8e;
+  /* Darker purple for dropdown options */
+  color: #ffffff;
+}

@@ -55,8 +55,6 @@ public class ExpenseCategoryService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Expense Category Already Exists");
         }
 
-
-
         ExpenseCategory newExpenseCategory = ExpenseCategory.builder()
                 .amount(expenseCategoryRequestDTO.getAmount())
                 .expenseCategory(expenseCategoryRequestDTO.getExpenseCategory())
@@ -71,22 +69,35 @@ public class ExpenseCategoryService {
 
         // Check xem Expense đã được apply chưa
         // Rồi thì phải chỉnh sửa Balance
-        if(existExpense.getIsApplied()) {
-            Balance existBalance = balanceRepository.findByUserId(existExpense.getUser().getId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Balance Not Found"));
+        if(Boolean.TRUE.equals(existExpense.getIsApplied())) {
+            try {
+                // Thêm kiểm tra null cho existExpense.getUser() ở đây
+                if (existExpense.getUser() == null) {
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User not found for expense");
+                }
+                Balance existBalance = balanceRepository.findByUserId(existExpense.getUser().getId())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Balance Not Found"));
 
-            LocalDate expenseDate = existExpense.getExpenseDate();
-            LocalDate today = LocalDate.now();
+                LocalDate expenseDate = existExpense.getExpenseDate();
+                LocalDate today = LocalDate.now();
 
-            existBalance.setCurrentBalance(existBalance.getCurrentBalance() - newExpenseCategory.getAmount());
+                existBalance.setCurrentBalance(existBalance.getCurrentBalance() - newExpenseCategory.getAmount());
 
-            // Cùng Month Củng Year mới + vào MonthlyExpense
-            if(expenseDate.getMonth().equals(today.getMonth()) &&
-                    expenseDate.getYear() == today.getYear()) {
-                existBalance.setMonthlyExpense(existBalance.getMonthlyExpense() + newExpenseCategory.getAmount());
+                // Cùng Month Củng Year mới + vào MonthlyExpense
+                if(expenseDate.getMonth().equals(today.getMonth()) &&
+                        expenseDate.getYear() == today.getYear()) {
+                    existBalance.setMonthlyExpense(existBalance.getMonthlyExpense() + newExpenseCategory.getAmount());
+                }
+
+                balanceRepository.save(existBalance);
+            } catch (ResponseStatusException e) {
+                // Log the exception and re-throw, or handle gracefully
+                System.err.println("Error updating balance in createExpenseCategory: " + e.getMessage());
+                throw e; // Re-throw to propagate the original status code
+            } catch (Exception e) {
+                System.err.println("Unexpected error updating balance in createExpenseCategory: " + e.getMessage());
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating balance after expense category created", e);
             }
-
-            balanceRepository.save(existBalance);
         }
 
         // Tạo Response
@@ -122,25 +133,36 @@ public class ExpenseCategoryService {
         Expense existExpense = expenseRepository.findById(expenseCategoryRequestDTO.getExpenseId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense Not Found"));
 
-        // Nếu update Expense Category ở quá khứ
-        if(existExpense.getIsApplied()) {
-            LocalDate today = LocalDate.now();
-            LocalDate expenseDate = existExpense.getExpenseDate();
-            Double delta = newAmount - oldAmount;
+        // Nếu update Expense Category đã đươc applied
+        if(Boolean.TRUE.equals(existExpense.getIsApplied())) {
+            try {
+                if (existExpense.getUser() == null) {
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User not found for expense");
+                }
+                LocalDate today = LocalDate.now();
+                LocalDate expenseDate = existExpense.getExpenseDate();
+                Double delta = newAmount - oldAmount;
 
-            Balance existBalance = balanceRepository.findByUserId(existExpense.getUser().getId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Balance Not Found"));
+                Balance existBalance = balanceRepository.findByUserId(existExpense.getUser().getId())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Balance Not Found"));
 
-            // Set lai balance
-            existBalance.setCurrentBalance(existBalance.getCurrentBalance() - delta);
+                // Set lai balance
+                existBalance.setCurrentBalance(existBalance.getCurrentBalance() - delta);
 
-            // Nếu quá khứ vẫn trong trong Expense Monthly
-            if (expenseDate.getMonth().equals(today.getMonth()) &&
-                    expenseDate.getYear() == today.getYear()) {
-                existBalance.setMonthlyExpense(existBalance.getMonthlyExpense() + delta);
+                // Nếu quá khứ vẫn trong trong Expense Monthly
+                if (expenseDate.getMonth().equals(today.getMonth()) &&
+                        expenseDate.getYear() == today.getYear()) {
+                    existBalance.setMonthlyExpense(existBalance.getMonthlyExpense() + delta);
+                }
+
+                balanceRepository.save(existBalance);
+            } catch (ResponseStatusException e) {
+                System.err.println("Error updating balance in updateExpenseCategory: " + e.getMessage());
+                throw e;
+            } catch (Exception e) {
+                System.err.println("Unexpected error updating balance in updateExpenseCategory: " + e.getMessage());
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating balance after expense category updated", e);
             }
-
-            balanceRepository.save(existBalance);
         }
 
         // Nếu có rồi update và update Expense

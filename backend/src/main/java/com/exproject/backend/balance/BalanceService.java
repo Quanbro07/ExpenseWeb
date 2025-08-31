@@ -2,6 +2,7 @@ package com.exproject.backend.balance;
 
 import com.exproject.backend.balance.balanceDTO.BalanceRequestDTO;
 import com.exproject.backend.balance.balanceDTO.BalanceResponseDTO;
+import com.exproject.backend.balance.balanceDTO.BalanceResponseMonthlyStatusDTO;
 import com.exproject.backend.balance.balanceDTO.BalanceResponseWithUserIdDTO;
 import com.exproject.backend.balance.balanceInfo.Balance;
 import com.exproject.backend.expense.ExpenseRepository;
@@ -9,6 +10,7 @@ import com.exproject.backend.expense.expenseInfo.Expense;
 import com.exproject.backend.user.UserRepository;
 import com.exproject.backend.user.userInfo.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -128,16 +130,16 @@ public class BalanceService {
         balanceRepository.saveAll(balanceList);
     }
 
-    // Cập nhật Balance theo từng ngày dựa vào expense hôm qua
+    // Cập nhật Balance theo trong quá khứ kể từ now
     // Trừ balance
     // Công thêm vào Monthly Expense
     // *TEST: mỗi 1p
     // *RealTime: mỗi ngày
     public void manageBalanceDaily() {
         System.out.println("[MANAGE DAILY]");
-        LocalDate yesterday = LocalDate.now().minusDays(1);
+        LocalDate now = LocalDate.now();
 
-        List<Expense> expenseList = expenseRepository.findAllByExpenseDate(yesterday);
+        List<Expense> expenseList = expenseRepository.findAllByIsAppliedFalseAndExpenseDateBefore(now);
 
         for(Expense expense : expenseList) {
             // Đã applied thì pass
@@ -156,18 +158,46 @@ public class BalanceService {
 
             Balance balance = existBalance.get();
 
-            Double sumExpense = expense.getAmount()+balance.getMonthlyExpense();
-            balance.setMonthlyExpense(sumExpense);
+            LocalDate expenseDate = expense.getExpenseDate();
+
+            if(expenseDate.getYear()==now.getYear() && expenseDate.getMonth()==now.getMonth())
+            {
+                Double sumExpense = expense.getAmount()+balance.getMonthlyExpense();
+                balance.setMonthlyExpense(sumExpense);
+            }
 
             Double subtract = balance.getCurrentBalance()-expense.getAmount();
             balance.setCurrentBalance(subtract);
 
             expense.setIsApplied(true);
 
-            balanceRepository.save(balance);
             expenseRepository.save(expense);
+            balanceRepository.save(balance);
         }
     }
 
 
+    public ResponseEntity<BalanceResponseMonthlyStatusDTO> getMonthlyStatus(Long userId) {
+        Balance existBalance = balanceRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Balance Not Found"));
+
+        Double monthlyExpense = existBalance.getMonthlyExpense();
+        Double monthlyLimitedExpense = existBalance.getMonthlyLimitedExpense();
+
+        Boolean isExceeded = monthlyExpense > monthlyLimitedExpense;
+        Double exceedAmount = (isExceeded) ? monthlyExpense - monthlyLimitedExpense : 0.0;
+        Double percentageUsed = (double)Math.round(monthlyExpense / monthlyLimitedExpense);
+
+        BalanceResponseMonthlyStatusDTO balanceResponseMonthlyStatusDTO
+                = BalanceResponseMonthlyStatusDTO.builder()
+                .isExceeded(isExceeded)
+                .monthlyLimitedExpense(monthlyLimitedExpense)
+                .monthlyExpense(monthlyExpense)
+                .exceedAmount(exceedAmount)
+                .percentageUsed(percentageUsed)
+                .build();
+
+        return new ResponseEntity<>(balanceResponseMonthlyStatusDTO, HttpStatus.OK);
+
+    }
 }

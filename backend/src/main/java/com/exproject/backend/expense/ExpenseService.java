@@ -6,6 +6,7 @@ import com.exproject.backend.dailyExpenseSetting.DailyExpenseSettingRepository;
 import com.exproject.backend.dailyExpenseSetting.dailyExpenseSettingInfo.DailyExpenseSetting;
 import com.exproject.backend.expense.dto.ExpenseRequestDTO;
 import com.exproject.backend.expense.dto.ExpenseResponseDTO;
+import com.exproject.backend.expense.dto.ExpenseResponseIdDTO;
 import com.exproject.backend.expense.expenseInfo.Expense;
 import com.exproject.backend.expenseCategory.ExpenseCategoryRepository;
 import com.exproject.backend.expenseCategory.expenseCategoryInfo.ExpenseCategory;
@@ -172,8 +173,8 @@ public class ExpenseService {
         List<ExpenseResponseDTO> expenseResponseDTOList = new ArrayList<>();
 
         for(Expense expense : expenseList) {
-            ExpenseResponseDTO expenseResponseDTO = new ExpenseResponseDTO(expense);
-            expenseResponseDTOList.add(expenseResponseDTO);
+            ExpenseResponseDTO expenseResponseIdDTO = new ExpenseResponseDTO(expense);
+            expenseResponseDTOList.add(expenseResponseIdDTO);
         }
 
         return new ResponseEntity<>(expenseResponseDTOList, HttpStatus.OK);
@@ -226,7 +227,7 @@ public class ExpenseService {
         Expense existExpense = expenseRepository.findByUserIdAndExpenseDate(userId,expenseDate)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found"));
 
-        ExpenseResponseDTO expenseResponseDTO = new ExpenseResponseDTO(existExpense);
-        return new ResponseEntity<>(expenseResponseDTO, HttpStatus.OK);
+        ExpenseResponseDTO expenseResponseIdDTO = new ExpenseResponseDTO(existExpense);
+        return new ResponseEntity<>(expenseResponseIdDTO, HttpStatus.OK);
     }
 }

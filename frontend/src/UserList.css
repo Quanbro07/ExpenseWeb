@@ -1,0 +1,67 @@
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    /* căn giữa bảng */
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.user-table th,
+.user-table td {
+    padding: 10px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.user-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.actions button {
+    margin: 0 3px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #e0e0e0;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.actions button:hover {
+    background-color: #d5d5d5;
+}
+
+.user-list-container {
+    padding: 20px;
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+    border-radius: 10px;
+    color: #333;
+    width: 350%;
+    margin-left: -130%;
+    margin-top: -30%;
+}
+
+.search-input {
+    height: 30px;
+    border-radius: 10px;
+    width: 99%;
+    margin-bottom: 10px;
+    border-color: #a18cd1;
+}
+
+.search-container {
+    text-align: center;
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border: none;
+}
+
+.actionButton {
+    width: 100px;
+}

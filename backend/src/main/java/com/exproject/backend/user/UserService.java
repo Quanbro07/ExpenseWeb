@@ -7,6 +7,8 @@ import com.exproject.backend.dailyExpenseSetting.dto.DailyExpenseSettingRequestD
 import com.exproject.backend.user.dto.UserRequestDTO;
 import com.exproject.backend.user.dto.UserResponseDTO;
 import com.exproject.backend.user.userInfo.User;
+import com.exproject.backend.user.userInfo.UserRole;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +45,7 @@ public class UserService {
                 .userName(userRequestDTO.getUserName())
                 .email(userRequestDTO.getEmail())
                 .password(userRequestDTO.getPassword())
-                .role(userRequestDTO.getRole())
+                .role(UserRole.User) // Mặc định role là 1 (User)
                 .build();
 
         // Lưu Vào Repository
@@ -69,6 +71,12 @@ public class UserService {
         // Check mật khẩu
         if(!existUser.getPassword().equals(userRequestDTO.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password");
+        }
+
+        // Check if user is active
+        System.out.println("User isActive: " + existUser.isActive()); // Log isActive status
+        if (!existUser.isActive()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ quản trị viên.");
         }
 
         UserResponseDTO userResponseDTO = new UserResponseDTO(existUser);
@@ -125,5 +133,23 @@ public class UserService {
         }
 
         return new ResponseEntity<>(userResponseDTOList, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Boolean> getUserActiveState(Long id) {
+        User existuser = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found"));
+
+        return new ResponseEntity<>(existuser.isActive(),HttpStatus.OK);
+    }
+
+    public ResponseEntity<Boolean> changeUserActiveState(Long id,boolean state) {
+        User existuser = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found"));
+
+        existuser.setActive(state);
+
+        userRepository.save(existuser);
+
+        return new ResponseEntity<>(existuser.isActive(),HttpStatus.OK);
     }
 }
