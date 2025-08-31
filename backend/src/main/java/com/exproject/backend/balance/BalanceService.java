@@ -156,9 +156,12 @@ public class BalanceService {
             }
 
             Balance balance = existBalance.get();
-
-            Double sumExpense = expense.getAmount()+balance.getMonthlyExpense();
-            balance.setMonthlyExpense(sumExpense);
+            LocalDate expenseDate= expense.getExpenseDate();
+            if(expenseDate.getYear()==now.getYear() && expenseDate.getMonth()==now.getMonth())
+            {
+                Double sumExpense = expense.getAmount()+balance.getMonthlyExpense();
+                balance.setMonthlyExpense(sumExpense);
+            }
 
             Double subtract = balance.getCurrentBalance()-expense.getAmount();
             balance.setCurrentBalance(subtract);

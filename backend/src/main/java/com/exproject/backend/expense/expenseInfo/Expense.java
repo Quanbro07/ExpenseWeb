@@ -60,7 +60,7 @@ public class Expense {
 
         this.amount = expenseRequestDTO.getAmount();
         this.description = expenseRequestDTO.getDescription();
-
+        this.isApplied=false;
         this.user = user;
     }
 
