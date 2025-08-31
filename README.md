@@ -14,7 +14,6 @@ and wait for Docker to build the web app.
 4. Open your browser and go to:
 http://localhost:3000
 to test it
-\
 
 # How to Stop the App
 
@@ -22,3 +21,24 @@ To stop and remove all containers, networks, and volumes created by Docker Compo
 ```
 docker compose down -v
 ```
+
+# Account For Test
+1. Quân
+Email: quanbro7612006@gmail.com
+Password: quanbro7
+Role: User
+
+2. Khoa
+Email: khoaga612006@gmail.com
+Password: khoabro7
+Role: User
+
+3. Nguyen
+Email: nguyenga12352035@gmail.com
+Password: nguyenbro7
+Role: User
+
+4. Trong
+Email: trongga112320@gmail.com
+Password: trongbro7
+Role: Admin

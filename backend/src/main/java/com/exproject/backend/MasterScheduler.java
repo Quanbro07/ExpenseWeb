@@ -17,7 +17,9 @@ public class MasterScheduler {
         this.balanceService = balanceService;
     }
 
-    @Scheduled(cron = "0 */3 * * * *")
+    // *Test: 1p
+    // *Real: 1 ngay
+    @Scheduled(cron = "0 */1 * * * *")
     public void runSchedules() {
         LocalDate today = LocalDate.now();
         System.out.println("[MASTER JOB START] " + today);
