@@ -10,6 +10,7 @@ import com.exproject.backend.expense.expenseInfo.Expense;
 import com.exproject.backend.user.UserRepository;
 import com.exproject.backend.user.userInfo.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -157,16 +158,20 @@ public class BalanceService {
 
             Balance balance = existBalance.get();
 
-            Double sumExpense = expense.getAmount()+balance.getMonthlyExpense();
-            balance.setMonthlyExpense(sumExpense);
+            LocalDate expenseDate = expense.getExpenseDate();
+
+            if(expenseDate.getYear() == now.getYear() && expenseDate.getMonth() == now.getMonth()) {
+                Double sumExpense = expense.getAmount()+balance.getMonthlyExpense();
+                balance.setMonthlyExpense(sumExpense);
+            }
 
             Double subtract = balance.getCurrentBalance()-expense.getAmount();
             balance.setCurrentBalance(subtract);
 
             expense.setIsApplied(true);
 
-            balanceRepository.save(balance);
             expenseRepository.save(expense);
+            balanceRepository.save(balance);
         }
     }
 

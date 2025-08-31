@@ -7,6 +7,7 @@ import com.exproject.backend.dailyExpenseSetting.dto.DailyExpenseSettingRequestD
 import com.exproject.backend.user.dto.UserRequestDTO;
 import com.exproject.backend.user.dto.UserResponseDTO;
 import com.exproject.backend.user.userInfo.User;
+import com.exproject.backend.user.userInfo.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,7 @@ public class UserService {
                 .userName(userRequestDTO.getUserName())
                 .email(userRequestDTO.getEmail())
                 .password(userRequestDTO.getPassword())
-                .role(userRequestDTO.getRole())
+                .role(UserRole.User)
                 .build();
 
         // Lưu Vào Repository

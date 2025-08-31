@@ -49,6 +49,7 @@ public class Expense {
         this.createDate = today;
         this.amount = dailyExpenseSetting.getDailyAmount();
         this.user = dailyExpenseSetting.getUser();
+        this.isApplied = false;
         this.description = dailyExpenseSetting.getDescription();
     }
 
@@ -60,7 +61,7 @@ public class Expense {
 
         this.amount = expenseRequestDTO.getAmount();
         this.description = expenseRequestDTO.getDescription();
-
+        this.isApplied = false;
         this.user = user;
     }
 
